@@ -1,5 +1,5 @@
-package org.madrid.data.repositories.remote.requestmodels
+package data.remote.requestmodels
 
 data class IpAddressRequestModel(
-    val ip: String,
+    val ipAddress: String,
 )

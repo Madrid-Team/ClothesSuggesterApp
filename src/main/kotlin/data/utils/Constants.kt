@@ -1,4 +1,4 @@
-package org.madrid.data.utils
+package data.utils
 
 object Constants {
 }
