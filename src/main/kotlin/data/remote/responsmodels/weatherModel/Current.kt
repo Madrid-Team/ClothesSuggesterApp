@@ -1,4 +1,4 @@
-package data.source.remote.responseModels.weatherModel
+package data.remote.responsmodels.weatherModel
 
 data class Current(
     val cloudCover: Int,

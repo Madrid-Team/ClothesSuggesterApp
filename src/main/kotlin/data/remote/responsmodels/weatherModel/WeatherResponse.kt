@@ -1,6 +1,6 @@
 package data.source.remote.responseModels
 
-import data.source.remote.responseModels.weatherModel.Current
+import data.remote.responsmodels.weatherModel.Current
 
 data class WeatherResponse(
     val current: Current,

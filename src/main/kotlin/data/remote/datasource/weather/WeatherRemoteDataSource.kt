@@ -1,0 +1,4 @@
+package org.madrid.data.repositories.remote.datasource.weather
+
+class WeatherRemoteDataSource: WeatherDataSource {
+}
