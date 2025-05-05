@@ -1,4 +1,4 @@
-package org.madrid.data.repositories
+package data.repositories
 
 class ClothesRepositoryImpl {
 }

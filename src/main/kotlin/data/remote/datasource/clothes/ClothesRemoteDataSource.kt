@@ -1,4 +1,26 @@
-package org.madrid.data.repositories.remote.datasource.clothes
+package data.remote.datasource.clothes
 
-class ClothesRemoteDataSource: ClothesDataSource {
+import data.remote.responsmodels.clothesModel.ClothesResponseModel
+
+class ClothesRemoteDataSource : ClothesDataSource {
+    override fun getCurrentOutfit(
+        weatherCode: String,
+        gender: String
+    ): ClothesResponseModel {
+        TODO("Not yet implemented")
+    }
+
+    override fun getTomorrowOutfit(
+        weatherCode: String,
+        gender: String
+    ): ClothesResponseModel {
+        TODO("Not yet implemented")
+    }
+
+    override fun getWeeklyOutfit(
+        weatherCode: String,
+        gender: String
+    ): ClothesResponseModel {
+        TODO("Not yet implemented")
+    }
 }
