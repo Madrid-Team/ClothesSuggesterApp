@@ -6,7 +6,7 @@ import domain.repositories.LocationRepository
 
 class GetCurrentLocationUseCase(private val locationRepository: LocationRepository) {
 
-    fun getCurrentLocation(ipAddressRequestModel: IpAddressRequestModel): LocationModel {
+    fun getCurrentLocation(ipAddressRequestModel: String): LocationModel {
         return LocationModel(
             ip = "",
             city = "",
