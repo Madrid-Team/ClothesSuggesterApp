@@ -1,4 +1,6 @@
 package data.repositories
 
-class WeatherRepositoryImpl {
+import domain.repositories.WeatherRepository
+
+class WeatherRepositoryImpl  : WeatherRepository{
 }
