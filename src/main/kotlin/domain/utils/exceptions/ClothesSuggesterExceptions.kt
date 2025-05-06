@@ -1,3 +1,3 @@
 package domain.utils.exceptions
 
-class ClothesSuggesterExceptions(){}
+open class ClothesSuggesterExceptions(message: String) : Exception(message){}
