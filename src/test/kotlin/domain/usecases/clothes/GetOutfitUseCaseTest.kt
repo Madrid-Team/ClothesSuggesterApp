@@ -28,43 +28,44 @@ class GetOutfitUseCaseTest {
     @Test
     fun `should return male winter clothes for low temperature`() {
         testScope.runTest {
-            val temp = 5.0
+            val temp = "5.0"
             val gender = "male"
-            val expected = ClothesModel(
+            val expected =ClothesModel(
                 maleClothes = listOf(ClothesItemModel(id = 1, title = "", description = "Winter Jacket")),
                 femaleClothes = emptyList()
             )
-            coEvery { clothesRepository.getDailyOutfit(temp) } returns expected
+
+            coEvery { clothesRepository.getAllOutfit(temp) } returns expected
 
             val result = getOutfitUseCase.getDailyOutfit(temp, gender)
 
-            assertEquals(expected, result)
+            assertEquals(expected.maleClothes, result)
         }
     }
 
     @Test
     fun `should return female summer clothes for high temperature`() {
         testScope.runTest {
-            val temp = 50.0
+            val temp = "50.0"
             val gender = "female"
             val expected = ClothesModel(
                 maleClothes = emptyList(),
                 femaleClothes = listOf(ClothesItemModel(id = 1, title = "", description = "summer clothes"))
             )
-            coEvery { clothesRepository.getDailyOutfit(temp) } returns expected
+            coEvery { clothesRepository.getAllOutfit(temp) } returns expected
 
             val result = getOutfitUseCase.getDailyOutfit(temp, gender)
 
-            assertEquals(expected, result)
+            assertEquals(expected.femaleClothes, result)
         }
     }
 
     @Test
     fun `should throw exception for unknown gender`() {
         testScope.runTest {
-            val temp = 20.0
+            val temp = "20.0"
             val gender = "alien"
-            coEvery { clothesRepository.getDailyOutfit(temp) } throws ClothesExceptions.UnknownGenderException()
+            coEvery { clothesRepository.getAllOutfit(temp) } throws ClothesExceptions.UnknownGenderException()
 
             assertThrows<ClothesExceptions.UnknownGenderException> {
                 getOutfitUseCase.getDailyOutfit(temp, gender)

@@ -1,27 +1,22 @@
 package domain.usecases.clothes
 
+import domain.models.clothesModels.ClothesItemModel
 import domain.models.clothesModels.ClothesModel
 import domain.repositories.ClothesRepository
 import domain.utils.exceptions.ClothesExceptions
 
 class GetOutfitUseCase(private val clothesRepository: ClothesRepository) {
-    suspend fun getDailyOutfit(temperature: Double, gender: String): ClothesModel {
+    suspend fun getDailyOutfit(temperature: String, gender: String): List<ClothesItemModel> {
         return try {
-            val outfit = clothesRepository.getDailyOutfit(temperature)
+            val outfit = clothesRepository.getAllOutfit(temperature)
             when (gender.lowercase()) {
-                "male" -> ClothesModel(
-                    maleClothes = outfit.maleClothes,
-                    femaleClothes = emptyList()
-                )
+                "male" -> outfit.maleClothes
 
-                "female" -> ClothesModel(
-                    maleClothes = emptyList(),
-                    femaleClothes = outfit.femaleClothes
-                )
+                "female" -> outfit.femaleClothes
 
                 else -> throw ClothesExceptions.UnknownGenderException()
             }
-        } catch (e: ClothesExceptions.UnknownGenderException) {
+        } catch (e: ClothesExceptions) {
             throw e
         }
 

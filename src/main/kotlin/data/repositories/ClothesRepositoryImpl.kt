@@ -8,10 +8,6 @@ import domain.repositories.ClothesRepository
 class ClothesRepositoryImpl(
     private val clothesDataSource: ClothesDataSource
 ) : ClothesRepository {
-    override suspend fun getDailyOutfit(temperature: Double): ClothesModel {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getAllOutfit(weatherCode: String): ClothesModel {
         try {
             val result = clothesDataSource.getAllOutfit(weatherCode)
