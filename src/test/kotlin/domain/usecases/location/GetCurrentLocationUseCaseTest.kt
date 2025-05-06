@@ -1,33 +1,32 @@
 package domain.usecases.location
 
-import data.remote.requestmodels.IpAddressRequestModel
 import domain.models.location.LocationModel
 import domain.repositories.LocationRepository
-import domain.utils.exceptions.ClothesExceptions
 import domain.utils.exceptions.LocationExceptions
 import io.mockk.coEvery
-import org.junit.jupiter.api.Assertions.*
-import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
 class GetCurrentLocationUseCaseTest {
-    lateinit var getCurrentLocationUseCase: GetCurrentLocationUseCase
-    lateinit var locationRepository: LocationRepository
+    private lateinit var getCurrentLocationUseCase: GetCurrentLocationUseCase
+    private lateinit var locationRepository: LocationRepository
+    private lateinit var testScope: TestScope
 
     @BeforeEach
     fun setUp() {
         locationRepository = mockk(relaxed = true)
         getCurrentLocationUseCase = GetCurrentLocationUseCase(locationRepository)
+        testScope = TestScope()
     }
 
     @Test
     fun `should return location model when pass a valid IP Address`() {
-        runBlocking {
+        testScope.runTest {
             //Given
             val ipAddress = "8.8.8.8"
             val expectedLocation = LocationModel(
@@ -50,7 +49,7 @@ class GetCurrentLocationUseCaseTest {
 
     @Test
     fun `should throw exception when pass an invalid iP address`() {
-        runBlocking {
+        testScope.runTest {
             //Given
             val ipAddress = "abc.def.ghi"
             coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationExceptions.InvalidIpAddressException()
@@ -65,7 +64,7 @@ class GetCurrentLocationUseCaseTest {
 
     @Test
     fun `should throw exception when pass an empty iP address`() {
-        runBlocking {
+        testScope.runTest {
             //Given
             val ipAddress = " "
             coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationExceptions.InvalidIpAddressException()
