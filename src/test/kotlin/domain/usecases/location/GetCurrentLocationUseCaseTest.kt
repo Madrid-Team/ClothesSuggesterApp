@@ -25,6 +25,7 @@ class GetCurrentLocationUseCaseTest {
         //Given
         val ipAddress = IpAddressRequestModel(
             ipAddress = "8.8.8.8"
+
         )
         val expectedLocation = LocationModel(
             ip = "8.8.8.8",
