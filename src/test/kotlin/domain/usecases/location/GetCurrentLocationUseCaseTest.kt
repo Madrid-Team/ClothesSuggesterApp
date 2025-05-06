@@ -1,18 +1,14 @@
 package domain.usecases.location
 
-import data.remote.requestmodels.IpAddressRequestModel
 import domain.models.location.LocationModel
 import domain.repositories.LocationRepository
-import domain.utils.exceptions.ClothesExceptions
 import domain.utils.exceptions.LocationExceptions
 import io.mockk.coEvery
-import org.junit.jupiter.api.Assertions.*
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
 class GetCurrentLocationUseCaseTest {
