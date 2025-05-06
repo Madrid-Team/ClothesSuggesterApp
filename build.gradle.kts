@@ -1,7 +1,10 @@
 plugins {
     kotlin("jvm") version "2.1.20"
+    jacoco
 }
-
+jacoco {
+    toolVersion = "0.8.10" // Latest version
+}
 group = "org.madrid"
 version = "1.0-SNAPSHOT"
 
@@ -41,7 +44,26 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
 }
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+}
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.80".toBigDecimal()
+            }
+        }
+    }
+}
+
 kotlin {
     jvmToolchain(23)
 }
