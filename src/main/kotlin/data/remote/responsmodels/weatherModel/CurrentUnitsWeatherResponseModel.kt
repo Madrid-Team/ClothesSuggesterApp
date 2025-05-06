@@ -1,7 +1,10 @@
 package data.remote.responsmodels.weatherModel
 
 import com.google.gson.annotations.SerializedName
+import domain.models.weatherModels.CurrentUnitsWeatherModel
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CurrentUnitsWeatherResponseModel(
     @SerializedName("cloud_cover")
     val cloudCover: String,
@@ -27,4 +30,20 @@ data class CurrentUnitsWeatherResponseModel(
     val weatherCode: String,
     @SerializedName("wind_speed_10m")
     val windSpeed: String
-)
+) {
+    fun toCurrentUnitsWeatherModel(): CurrentUnitsWeatherModel =
+        CurrentUnitsWeatherModel(
+            cloudCover = this.cloudCover,
+            interval = this.interval,
+            isDay = this.isDay,
+            precipitation = this.precipitation,
+            rain = this.rain,
+            relativeHumidity = this.relativeHumidity,
+            showers = this.showers,
+            snowfall = this.snowfall,
+            temperature = this.temperature,
+            time = this.time,
+            weatherCode = this.weatherCode,
+            windSpeed = this.windSpeed
+        )
+}
