@@ -17,11 +17,11 @@ fun Throwable.toWeatherException(): WeatherExceptions {
             WeatherExceptions.WeatherApiFailedException()
 
 
-//        is ClientRequestException -> when (response.status.value) {
-//            // Too Many Requests
-//            429 -> WeatherExceptions.WeatherApiRateLimitException()
-//            else -> WeatherExceptions.WeatherApiFailedException()
-//        }
+        is ClientRequestException -> when (response.status.value) {
+            // Too Many Requests
+            429 -> WeatherExceptions.WeatherApiRateLimitException()
+            else -> WeatherExceptions.WeatherApiFailedException()
+        }
 
         is kotlinx.serialization.SerializationException ->
             WeatherExceptions.WeatherConditionNotSupportedException()
@@ -51,11 +51,11 @@ fun Throwable.toLocationExceptions(): LocationExceptions {
         is IOException ->
             LocationExceptions.LocationNotFoundException()
 
-//        is ClientRequestException -> when (response.status.value) {
-//            // Bad Request
-//            400 -> LocationExceptions.InvalidCoordinateFormatException()
-//            else -> LocationExceptions.LocationNotFoundException()
-//        }
+        is ClientRequestException -> when (response.status.value) {
+            // Bad Request
+            400 -> LocationExceptions.InvalidIpAddressException()
+            else -> LocationExceptions.LocationNotFoundException()
+        }
 
         else -> LocationExceptions.LocationNotFoundException()
     }
