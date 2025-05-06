@@ -53,7 +53,7 @@ fun Throwable.toLocationExceptions(): LocationExceptions {
 
         is ClientRequestException -> when (response.status.value) {
             // Bad Request
-            400 -> LocationExceptions.InvalidCoordinateFormatException()
+            400 -> LocationExceptions.InvalidIpAddressException()
             else -> LocationExceptions.LocationNotFoundException()
         }
 
