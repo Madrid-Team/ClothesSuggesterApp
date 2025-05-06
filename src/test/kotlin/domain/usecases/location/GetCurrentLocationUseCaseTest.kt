@@ -9,6 +9,7 @@ import io.mockk.coEvery
 import org.junit.jupiter.api.Assertions.*
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -26,45 +27,55 @@ class GetCurrentLocationUseCaseTest {
 
     @Test
     fun `should return location model when pass a valid IP Address`() {
-        //Given
-        val ipAddress = "8.8.8.8"
-        val expectedLocation = LocationModel(
-            ip = "8.8.8.8",
-            city = "Mountain View",
-            countryName = "United States",
-            latitude = 37.386,
-            longitude = -122.0838,
-            region = "California"
-        )
-        coEvery { locationRepository.getCurrentLocation(ipAddress) } returns expectedLocation
-        // When
-        val result = getCurrentLocationUseCase.getCurrentLocation(ipAddress)
+        runBlocking {
+            //Given
+            val ipAddress = "8.8.8.8"
+            val expectedLocation = LocationModel(
+                ip = "8.8.8.8",
+                city = "Mountain View",
+                countryName = "United States",
+                latitude = 37.386,
+                longitude = -122.0838,
+                region = "California"
+            )
+            coEvery { locationRepository.getCurrentLocation(ipAddress) } returns expectedLocation
+            // When
+            val result = getCurrentLocationUseCase.getCurrentLocation(ipAddress)
 
-        // Then
-        assertEquals(expectedLocation, result)
+            // Then
+            assertEquals(expectedLocation, result)
+        }
+
     }
 
     @Test
     fun `should throw exception when pass an invalid iP address`() {
-        //Given
-        val ipAddress = "abc.def.ghi"
-        coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationExceptions.InvalidIpAddressException()
+        runBlocking {
+            //Given
+            val ipAddress = "abc.def.ghi"
+            coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationExceptions.InvalidIpAddressException()
 
-        // when && then
-        assertThrows<LocationExceptions.InvalidIpAddressException> {
-            getCurrentLocationUseCase.getCurrentLocation(ipAddress)
+            // when && then
+            assertThrows<LocationExceptions.InvalidIpAddressException> {
+                getCurrentLocationUseCase.getCurrentLocation(ipAddress)
+            }
         }
+
     }
+
     @Test
     fun `should throw exception when pass an empty iP address`() {
-        //Given
-        val ipAddress = " "
-        coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationExceptions.InvalidIpAddressException()
+        runBlocking {
+            //Given
+            val ipAddress = " "
+            coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationExceptions.InvalidIpAddressException()
 
-        // when && then
-        assertThrows<LocationExceptions.InvalidIpAddressException> {
-            getCurrentLocationUseCase.getCurrentLocation(ipAddress)
+            // when && then
+            assertThrows<LocationExceptions.InvalidIpAddressException> {
+                getCurrentLocationUseCase.getCurrentLocation(ipAddress)
+            }
         }
     }
+
 
 }
