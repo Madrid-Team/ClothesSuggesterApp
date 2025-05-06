@@ -1,4 +1,5 @@
 package domain.utils.exceptions
 
-class ClothesExceptions {
+
+open class ClothesExceptions(message: String) : ClothesSuggesterExceptions(message) {
 }
