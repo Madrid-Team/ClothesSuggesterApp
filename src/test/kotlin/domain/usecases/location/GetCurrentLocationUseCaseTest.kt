@@ -23,10 +23,7 @@ class GetCurrentLocationUseCaseTest {
     @Test
     fun `should return location model when pass a valid IP Address`() {
         //Given
-        val ipAddress = IpAddressRequestModel(
-            ipAddress = "8.8.8.8"
-
-        )
+        val ipAddress = "8.8.8.8"
         val expectedLocation = LocationModel(
             ip = "8.8.8.8",
             city = "Mountain View",
