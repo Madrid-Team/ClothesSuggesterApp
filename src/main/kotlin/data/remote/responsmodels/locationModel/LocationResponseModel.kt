@@ -1,6 +1,7 @@
 package data.remote.responsmodels.locationModel
 
 
+import domain.models.location.LocationModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -60,4 +61,14 @@ data class LocationResponseModel(
     val utcOffset: String,
     @SerialName("version")
     val version: String
-)
+) {
+    fun toLocationModel(): LocationModel =
+        LocationModel(
+            ip = this.ip,
+            latitude = this.latitude,
+            longitude = this.longitude,
+            region = this.region,
+            city = this.city,
+            countryName = this.countryName,
+        )
+}
