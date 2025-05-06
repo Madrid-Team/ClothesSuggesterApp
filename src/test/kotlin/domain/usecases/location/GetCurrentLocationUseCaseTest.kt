@@ -55,4 +55,16 @@ class GetCurrentLocationUseCaseTest {
             getCurrentLocationUseCase.getCurrentLocation(ipAddress)
         }
     }
+    @Test
+    fun `should throw exception when pass an empty iP address`() {
+        //Given
+        val ipAddress = " "
+        coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationExceptions.InvalidIpAddressException()
+
+        // when && then
+        assertThrows<LocationExceptions.InvalidIpAddressException> {
+            getCurrentLocationUseCase.getCurrentLocation(ipAddress)
+        }
+    }
+
 }
