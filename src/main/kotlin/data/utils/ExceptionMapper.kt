@@ -7,10 +7,8 @@ import io.ktor.client.plugins.*
 import kotlinx.io.IOException
 import java.net.UnknownHostException
 
-suspend fun Throwable?.toWeatherException(): WeatherExceptions {
+suspend fun Throwable.toWeatherException(): WeatherExceptions {
     return when (val exceptions = this) {
-        null ->
-            WeatherExceptions.WeatherApiFailedException()
 
         is WeatherExceptions -> exceptions
 
@@ -31,11 +29,8 @@ suspend fun Throwable?.toWeatherException(): WeatherExceptions {
     }
 }
 
-suspend fun Throwable?.toClothesExceptions(): ClothesExceptions {
+suspend fun Throwable.toClothesExceptions(): ClothesExceptions {
     return when (val exceptions = this) {
-        null ->
-            ClothesExceptions.OutfitNotFoundException()
-
         is ClothesExceptions -> exceptions
 
         is kotlinx.serialization.SerializationException ->
@@ -47,11 +42,8 @@ suspend fun Throwable?.toClothesExceptions(): ClothesExceptions {
     }
 }
 
-suspend fun Throwable?.toLocationExceptions(): LocationExceptions {
+suspend fun Throwable.toLocationExceptions(): LocationExceptions {
     return when (val exceptions = this) {
-        null ->
-            LocationExceptions.LocationNotFoundException()
-
         is LocationExceptions -> exceptions
 
         is UnknownHostException,
