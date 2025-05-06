@@ -8,7 +8,7 @@ import kotlin.Int
 
 class GetCurrentWeatherUseCase(private val weatherRepository: WeatherRepository) {
 
-    fun getCurrentWeather(latitude: Double, longitude : Double): CurrentWeatherModel {
+    suspend fun getCurrentWeather(latitude: Double, longitude : Double): CurrentWeatherModel {
         return CurrentWeatherModel(
             cloudCover = 0,
             interval = 0,
