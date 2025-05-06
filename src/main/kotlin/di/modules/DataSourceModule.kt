@@ -10,8 +10,8 @@ import org.koin.dsl.module
 
 val dataSourceModule = module{
 
-    single<ClothesDataSource>{ ClothesRemoteDataSource() }
-    single<LocationDataSource> { LocationRemoteDataSource() }
-    single<WeatherDataSource>{ WeatherRemoteDataSource() }
+    single<ClothesDataSource>{ ClothesRemoteDataSource(get()) }
+    single<LocationDataSource> { LocationRemoteDataSource(get()) }
+    single<WeatherDataSource>{ WeatherRemoteDataSource(get()) }
 
 }
