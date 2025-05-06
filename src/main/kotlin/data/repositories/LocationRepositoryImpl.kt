@@ -1,4 +1,6 @@
 package data.repositories
 
-class LocationRepositoryImpl {
+import domain.repositories.LocationRepository
+
+class LocationRepositoryImpl : LocationRepository {
 }

@@ -1,4 +1,6 @@
 package data.repositories
 
-class ClothesRepositoryImpl {
+import domain.repositories.ClothesRepository
+
+class ClothesRepositoryImpl : ClothesRepository{
 }
