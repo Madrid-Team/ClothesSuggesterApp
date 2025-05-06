@@ -41,7 +41,7 @@ class GetTomorrowWeatherUseCaseTest {    lateinit var weatherRepository: Weather
 
 
     @Test
-    fun `get current weather should throw exception when lat  is invalid`(){
+    fun `get tomorrow weather should throw exception when lat  is invalid`(){
         //Given
         val lat = 112.5
         val lng = 62.3
@@ -63,7 +63,7 @@ class GetTomorrowWeatherUseCaseTest {    lateinit var weatherRepository: Weather
     }
 
     @Test
-    fun `get current weather should throw exception when lng  is invalid`(){
+    fun `get tomorrow weather should throw exception when lng  is invalid`(){
         //Given
         val lat = 80.1
         val lng = 192.1
