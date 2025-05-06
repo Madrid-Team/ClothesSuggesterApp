@@ -10,7 +10,7 @@ class GetCurrentLocationUseCase(private val locationRepository: LocationReposito
     suspend fun getCurrentLocation(ipAddressRequestModel: String): LocationModel {
        try {
            return locationRepository.getCurrentLocation(ipAddressRequestModel)
-       } catch (e: LocationExceptions.InvalidIpAddressException){
+       } catch (e: LocationExceptions){
            throw e
        }
 
