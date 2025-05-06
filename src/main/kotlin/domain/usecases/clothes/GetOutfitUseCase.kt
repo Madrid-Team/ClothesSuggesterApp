@@ -11,5 +11,6 @@ class GetOutfitUseCase(private val clothesRepository: ClothesRepository) {
             femaleClothes = emptyList(),
             maleClothes = emptyList()
         )
+
     }
 }
