@@ -1,5 +1,6 @@
 package data.repositories
 
+
 import data.remote.datasource.location.LocationDataSource
 import data.utils.toLocationExceptions
 import domain.models.location.LocationModel

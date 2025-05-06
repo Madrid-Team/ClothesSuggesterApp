@@ -37,7 +37,7 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:3.1.2")
     implementation("io.ktor:ktor-client-okhttp:3.1.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
 }
 
 tasks.test {
