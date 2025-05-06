@@ -7,10 +7,21 @@ import domain.utils.exceptions.ClothesExceptions
 
 class GetOutfitUseCase(private val clothesRepository: ClothesRepository) {
     suspend fun getDailyOutfit(temperature: Double, gender: String): ClothesModel {
-        return ClothesModel(
-            femaleClothes = emptyList(),
-            maleClothes = emptyList()
-        )
+        val outfit = clothesRepository.getDailyOutfit(temperature)
+        return when (gender) {
+            "male" -> ClothesModel(
+                maleClothes = outfit.maleClothes,
+                femaleClothes = emptyList()
+            )
+
+            "female" -> ClothesModel(
+                maleClothes = emptyList(),
+                femaleClothes = outfit.femaleClothes
+            )
+
+            else -> throw ClothesExceptions.UnknownGenderException()
+        }
+
 
     }
 }
