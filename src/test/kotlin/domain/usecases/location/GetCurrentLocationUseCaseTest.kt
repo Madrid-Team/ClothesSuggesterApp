@@ -3,12 +3,16 @@ package domain.usecases.location
 import data.remote.requestmodels.IpAddressRequestModel
 import domain.models.location.LocationModel
 import domain.repositories.LocationRepository
+import domain.utils.exceptions.ClothesExceptions
+import domain.utils.exceptions.LocationExceptions
 import io.mockk.coEvery
 import org.junit.jupiter.api.Assertions.*
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 
 class GetCurrentLocationUseCaseTest {
     lateinit var getCurrentLocationUseCase: GetCurrentLocationUseCase
@@ -32,11 +36,23 @@ class GetCurrentLocationUseCaseTest {
             longitude = -122.0838,
             region = "California"
         )
-        coEvery { locationRepository.getCurrentLocation(ipAddress) }returns expectedLocation
+        coEvery { locationRepository.getCurrentLocation(ipAddress) } returns expectedLocation
         // When
         val result = getCurrentLocationUseCase.getCurrentLocation(ipAddress)
 
         // Then
         assertEquals(expectedLocation, result)
+    }
+
+    @Test
+    fun `should throw exception when pass an invalid iP address`() {
+        //Given
+        val ipAddress = "abc.def.ghi"
+        coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationExceptions.InvalidIpAddressException()
+
+        // when && then
+        assertThrows<LocationExceptions.InvalidIpAddressException> {
+            getCurrentLocationUseCase.getCurrentLocation(ipAddress)
+        }
     }
 }
