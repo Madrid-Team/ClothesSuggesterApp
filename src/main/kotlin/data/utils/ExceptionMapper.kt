@@ -38,10 +38,10 @@ fun Throwable?.toClothesExceptions(): ClothesExceptions {
 
         is ClothesExceptions -> exceptions
 
-        is IllegalArgumentException -> ClothesExceptions.UnsupportedTemperatureRangeException()
-
         is kotlinx.serialization.SerializationException ->
             ClothesExceptions.MissingClothingDataException()
+
+        is IllegalArgumentException -> ClothesExceptions.UnsupportedTemperatureRangeException()
 
         else -> ClothesExceptions.OutfitNotFoundException()
     }
