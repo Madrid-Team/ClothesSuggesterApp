@@ -7,7 +7,7 @@ import io.ktor.client.plugins.*
 import kotlinx.io.IOException
 import java.net.UnknownHostException
 
-suspend fun Throwable.toWeatherException(): WeatherExceptions {
+fun Throwable.toWeatherException(): WeatherExceptions {
     return when (val exceptions = this) {
 
         is WeatherExceptions -> exceptions
@@ -15,6 +15,7 @@ suspend fun Throwable.toWeatherException(): WeatherExceptions {
         is UnknownHostException,
         is IOException ->
             WeatherExceptions.WeatherApiFailedException()
+
 
         is ClientRequestException -> when (response.status.value) {
             // Too Many Requests
@@ -29,7 +30,7 @@ suspend fun Throwable.toWeatherException(): WeatherExceptions {
     }
 }
 
-suspend fun Throwable.toClothesExceptions(): ClothesExceptions {
+fun Throwable.toClothesExceptions(): ClothesExceptions {
     return when (val exceptions = this) {
         is ClothesExceptions -> exceptions
 
@@ -42,7 +43,7 @@ suspend fun Throwable.toClothesExceptions(): ClothesExceptions {
     }
 }
 
-suspend fun Throwable.toLocationExceptions(): LocationExceptions {
+fun Throwable.toLocationExceptions(): LocationExceptions {
     return when (val exceptions = this) {
         is LocationExceptions -> exceptions
 
