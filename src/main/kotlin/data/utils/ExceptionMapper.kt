@@ -1,62 +1,69 @@
 package data.utils
 
-import domain.utils.exceptions.ClothesExceptions
-import domain.utils.exceptions.LocationExceptions
-import domain.utils.exceptions.WeatherExceptions
-import io.ktor.client.plugins.*
-import kotlinx.io.IOException
-import java.net.UnknownHostException
+import domain.utils.exceptions.ClothesException
+import domain.utils.exceptions.LocationException
+import domain.utils.exceptions.WeatherException
 
-fun Throwable.toWeatherException(): WeatherExceptions {
+fun Throwable.toWeatherException(): WeatherException {
     return when (val exceptions = this) {
 
-        is WeatherExceptions -> exceptions
+        is WeatherException -> exceptions
 
-        is UnknownHostException,
-        is IOException ->
-            WeatherExceptions.WeatherApiFailedException()
+        is NetworkException.SerializationException ->
+            WeatherException.WeatherDataException(exceptions.message.toString())
 
+        is NetworkException.RequestTimeoutException,
+        is NetworkException.TooManyRequestsException
+            -> WeatherException.WeatherDataException(exceptions.message.toString())
 
-        is ClientRequestException -> when (response.status.value) {
-            // Too Many Requests
-            429 -> WeatherExceptions.WeatherApiRateLimitException()
-            else -> WeatherExceptions.WeatherApiFailedException()
-        }
+        is NetworkException.ServerErrorException -> WeatherException.WeatherDataException(exceptions.message.toString())
 
-        is kotlinx.serialization.SerializationException ->
-            WeatherExceptions.WeatherConditionNotSupportedException()
+        is NetworkException.UnknownNetworkException -> WeatherException.WeatherDataException(exceptions.message.toString())
 
-        else -> WeatherExceptions.WeatherApiFailedException()
+        is NetworkException.NoInternetConnectionException -> WeatherException.WeatherDataException(exceptions.message.toString())
+
+        else -> WeatherException.WeatherDataException(exceptions.message.toString())
     }
 }
 
-fun Throwable.toClothesExceptions(): ClothesExceptions {
+fun Throwable.toClothesExceptions(): ClothesException {
     return when (val exceptions = this) {
-        is ClothesExceptions -> exceptions
+        is ClothesException -> exceptions
 
-        is kotlinx.serialization.SerializationException ->
-            ClothesExceptions.MissingClothingDataException()
+        is NetworkException.SerializationException ->
+            ClothesException.ClothingDataException(exceptions.message.toString())
 
-        is IllegalArgumentException -> ClothesExceptions.UnsupportedTemperatureRangeException()
+        is NetworkException.RequestTimeoutException,
+        is NetworkException.TooManyRequestsException
+            -> ClothesException.ClothingDataException(exceptions.message.toString())
 
-        else -> ClothesExceptions.OutfitNotFoundException()
+        is NetworkException.ServerErrorException -> ClothesException.ClothingDataException(exceptions.message.toString())
+
+        is NetworkException.UnknownNetworkException -> ClothesException.ClothingDataException(exceptions.message.toString())
+
+        is NetworkException.NoInternetConnectionException -> ClothesException.ClothingDataException(exceptions.message.toString())
+
+        else -> ClothesException.ClothingDataException(exceptions.message.toString())
     }
 }
 
-fun Throwable.toLocationExceptions(): LocationExceptions {
+fun Throwable.toLocationExceptions(): LocationException {
     return when (val exceptions = this) {
-        is LocationExceptions -> exceptions
+        is LocationException -> exceptions
 
-        is UnknownHostException,
-        is IOException ->
-            LocationExceptions.LocationNotFoundException()
+        is NetworkException.SerializationException ->
+            LocationException.LocationDataException(exceptions.message.toString())
 
-        is ClientRequestException -> when (response.status.value) {
-            // Bad Request
-            400 -> LocationExceptions.InvalidIpAddressException()
-            else -> LocationExceptions.LocationNotFoundException()
-        }
+        is NetworkException.RequestTimeoutException,
+        is NetworkException.TooManyRequestsException
+            -> LocationException.LocationDataException(exceptions.message.toString())
 
-        else -> LocationExceptions.LocationNotFoundException()
+        is NetworkException.ServerErrorException -> LocationException.LocationDataException(exceptions.message.toString())
+
+        is NetworkException.UnknownNetworkException -> LocationException.LocationDataException(exceptions.message.toString())
+
+        is NetworkException.NoInternetConnectionException -> LocationException.LocationDataException(exceptions.message.toString())
+
+        else -> LocationException.LocationDataException(exceptions.message.toString())
     }
 }

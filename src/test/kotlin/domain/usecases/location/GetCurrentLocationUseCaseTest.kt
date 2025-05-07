@@ -2,7 +2,7 @@ package domain.usecases.location
 
 import domain.models.location.LocationModel
 import domain.repositories.LocationRepository
-import domain.utils.exceptions.LocationExceptions
+import domain.utils.exceptions.LocationException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
@@ -52,10 +52,10 @@ class GetCurrentLocationUseCaseTest {
         testScope.runTest {
             //Given
             val ipAddress = "abc.def.ghi"
-            coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationExceptions.InvalidIpAddressException()
+            coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationException.InvalidIpAddressException()
 
             // when && then
-            assertThrows<LocationExceptions.InvalidIpAddressException> {
+            assertThrows<LocationException.InvalidIpAddressException> {
                 getCurrentLocationUseCase.getCurrentLocation(ipAddress)
             }
         }
@@ -67,10 +67,10 @@ class GetCurrentLocationUseCaseTest {
         testScope.runTest {
             //Given
             val ipAddress = " "
-            coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationExceptions.InvalidIpAddressException()
+            coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationException.InvalidIpAddressException()
 
             // when && then
-            assertThrows<LocationExceptions.InvalidIpAddressException> {
+            assertThrows<LocationException.InvalidIpAddressException> {
                 getCurrentLocationUseCase.getCurrentLocation(ipAddress)
             }
         }
