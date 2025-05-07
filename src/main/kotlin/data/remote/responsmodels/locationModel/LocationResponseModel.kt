@@ -49,8 +49,6 @@ data class LocationResponseModel(
     val network: String,
     @SerialName("org")
     val org: String,
-    @SerialName("postal")
-    val postal: Any,
     @SerialName("region")
     val region: String,
     @SerialName("region_code")
