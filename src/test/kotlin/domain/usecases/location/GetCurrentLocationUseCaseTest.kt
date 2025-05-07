@@ -52,10 +52,10 @@ class GetCurrentLocationUseCaseTest {
         testScope.runTest {
             //Given
             val ipAddress = "abc.def.ghi"
-            coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationException.InvalidIpAddressException()
+            coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationException.InvalidLocationDataException("")
 
             // when && then
-            assertThrows<LocationException.InvalidIpAddressException> {
+            assertThrows<LocationException.InvalidLocationDataException> {
                 getCurrentLocationUseCase.getCurrentLocation(ipAddress)
             }
         }
@@ -67,10 +67,10 @@ class GetCurrentLocationUseCaseTest {
         testScope.runTest {
             //Given
             val ipAddress = " "
-            coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationException.InvalidIpAddressException()
+            coEvery { locationRepository.getCurrentLocation(ipAddress) } throws LocationException.InvalidLocationDataException("")
 
             // when && then
-            assertThrows<LocationException.InvalidIpAddressException> {
+            assertThrows<LocationException.InvalidLocationDataException> {
                 getCurrentLocationUseCase.getCurrentLocation(ipAddress)
             }
         }
