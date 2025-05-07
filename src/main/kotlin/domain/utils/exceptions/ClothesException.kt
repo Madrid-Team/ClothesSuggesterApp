@@ -7,6 +7,8 @@ open class ClothesException(message: String) : ClothesSuggesterExceptions(messag
 
     class ClothingDataException(message: String) : ClothesException(message)
 
+    class UnknownGenderException(message: String) : ClothesException(message)
+
     class OutfitNotFoundException :
         ClothesException("Outfit Not Found Exception")
 }

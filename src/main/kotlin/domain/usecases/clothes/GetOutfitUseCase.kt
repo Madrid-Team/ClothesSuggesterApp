@@ -1,10 +1,9 @@
 package domain.usecases.clothes
 
 import domain.models.clothesModels.ClothesItemModel
-import domain.models.clothesModels.ClothesModel
 import domain.repositories.ClothesRepository
 import domain.utils.Gender
-import domain.utils.exceptions.ClothesExceptions
+import domain.utils.exceptions.ClothesException
 
 class GetOutfitUseCase(private val clothesRepository: ClothesRepository) {
     suspend fun getDailyOutfit(temperature: String, gender: String): List<ClothesItemModel> {
@@ -14,7 +13,7 @@ class GetOutfitUseCase(private val clothesRepository: ClothesRepository) {
                 Gender.MALE -> outfit.maleClothes
                 Gender.FEMALE -> outfit.femaleClothes
             }
-        } catch (e: ClothesExceptions) {
+        } catch (e: ClothesException) {
             throw e
         }
 

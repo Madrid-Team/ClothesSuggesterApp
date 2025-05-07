@@ -1,12 +1,12 @@
 package domain.usecases.weather
 
 import domain.repositories.WeatherRepository
-import domain.utils.exceptions.WeatherExceptions
+import domain.utils.exceptions.WeatherException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
@@ -50,12 +50,12 @@ class GetTomorrowWeatherUseCaseTest {
             val lng = 62.3
 
 
-            coEvery { weatherRepository.getWeather(lat, lng) } throws  WeatherExceptions.WeatherDataOutOfRangeException()
+            coEvery { weatherRepository.getWeather(lat, lng) } throws  WeatherException.WeatherDataException("")
 
 
 
             //when & then
-            assertThrows<WeatherExceptions.WeatherDataOutOfRangeException> {
+            assertThrows<WeatherException.WeatherDataException> {
                 getTomorrowWeatherUseCase.getTomorrowWeather(lat, lng)
             }
 
@@ -70,10 +70,10 @@ class GetTomorrowWeatherUseCaseTest {
             //Given
             val lat = 80.1
             val lng = 192.1
-            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherExceptions.WeatherDataOutOfRangeException()
+            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.WeatherDataException("")
 
             //when & then
-            assertThrows<WeatherExceptions.WeatherDataOutOfRangeException> {
+            assertThrows<WeatherException.WeatherDataException> {
                 getTomorrowWeatherUseCase.getTomorrowWeather(lat, lng)
             }
 

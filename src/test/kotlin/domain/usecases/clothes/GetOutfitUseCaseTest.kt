@@ -3,7 +3,7 @@ package domain.usecases.clothes
 import domain.models.clothesModels.ClothesItemModel
 import domain.models.clothesModels.ClothesModel
 import domain.repositories.ClothesRepository
-import domain.utils.exceptions.ClothesExceptions
+import domain.utils.exceptions.ClothesException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
@@ -65,9 +65,9 @@ class GetOutfitUseCaseTest {
         testScope.runTest {
             val temp = "20.0"
             val gender = "alien"
-            coEvery { clothesRepository.getAllOutfit(temp) } throws ClothesExceptions.UnknownGenderException()
+            coEvery { clothesRepository.getAllOutfit(temp) } throws ClothesException.ClothingDataException("")
 
-            assertThrows<ClothesExceptions.UnknownGenderException> {
+            assertThrows<ClothesException.ClothingDataException> {
                 getOutfitUseCase.getDailyOutfit(temp, gender)
             }
         }
