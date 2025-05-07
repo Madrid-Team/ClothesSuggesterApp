@@ -42,6 +42,46 @@ class GetTomorrowWeatherUseCaseTest {
         }
 
     }
+    @Test
+    fun `get tomorrow weather should throw exception when lat  is invalid`(){
+        testScope.runTest {
+            //Given
+            val lat = 112.5
+            val lng = 62.3
+
+
+            coEvery { weatherRepository.getWeather(lat, lng) } throws  WeatherExceptions.WeatherDataOutOfRangeException()
+
+
+
+            //when & then
+            assertThrows<WeatherExceptions.WeatherDataOutOfRangeException> {
+                getTomorrowWeatherUseCase.getTomorrowWeather(lat, lng)
+            }
+
+
+        }
+
+    }
+
+    @Test
+    fun `get tomorrow weather should throw exception when lng  is invalid`(){
+        testScope.runTest {
+            //Given
+            val lat = 80.1
+            val lng = 192.1
+            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherExceptions.WeatherDataOutOfRangeException()
+
+            //when & then
+            assertThrows<WeatherExceptions.WeatherDataOutOfRangeException> {
+                getTomorrowWeatherUseCase.getTomorrowWeather(lat, lng)
+            }
+
+
+        }
+
+    }
+
 
 
 }
