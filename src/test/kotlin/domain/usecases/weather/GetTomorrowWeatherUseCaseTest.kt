@@ -24,6 +24,24 @@ class GetTomorrowWeatherUseCaseTest {
 
     }
 
+    @Test
+    fun `get tomorrow weather should return current weather model when latitude and longitude are valid `(){
+        testScope.runTest {
+            //Given
+            val lat = 41.2
+            val lng = 62.3
+            val expectedWeatherModel = createWeatherModel()
+            coEvery { weatherRepository.getWeather(lat, lng) } returns expectedWeatherModel
+
+            //when
+            val result = getTomorrowWeatherUseCase.getTomorrowWeather(lat, lng)
+
+            //then
+            assertEquals(expectedWeatherModel.daily, result)
+
+        }
+
+    }
 
 
 }
