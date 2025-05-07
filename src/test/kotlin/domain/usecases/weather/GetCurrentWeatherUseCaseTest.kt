@@ -46,43 +46,66 @@ class GetCurrentWeatherUseCaseTest {
     }
 
     @Test
-    fun `get current weather should throw exception when lat  is invalid`() {
+    fun `getCurrentWeather should throw InvalidWeatherDataException when latitude  is invalid`() {
         testScope.runTest {
             //Given
             val lat = 112.5
             val lng = 62.3
 
-            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.WeatherDataException("")
+            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.InvalidWeatherDataException("")
 
             //when & then
-            assertThrows<WeatherException.WeatherDataException> {
+            assertThrows<WeatherException.InvalidWeatherDataException> {
                 getCurrentWeatherUseCase.getCurrentWeather(lat, lng)
             }
-
-
         }
-
-
     }
 
     @Test
-    fun `get current weather should throw exception when lng  is invalid`() {
+    fun `getCurrentWeather should throw InvalidWeatherDataException when longitude  is invalid`() {
         testScope.runTest {
             //Given
             val lat = 80.1
             val lng = 192.1
 
-            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.WeatherDataException("")
+            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.InvalidWeatherDataException("")
 
             //when & then
-            assertThrows<WeatherException.WeatherDataException> {
+            assertThrows<WeatherException.InvalidWeatherDataException> {
                 getCurrentWeatherUseCase.getCurrentWeather(lat, lng)
             }
-
-
         }
-
     }
 
+    @Test
+    fun `getCurrentWeather should throw WeatherNetworkException when no internet connection`() {
+        testScope.runTest {
+            //Given
+            val lat = 80.1
+            val lng = 80.1
 
+            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.WeatherNetworkException("")
+
+            //when & then
+            assertThrows<WeatherException.WeatherNetworkException> {
+                getCurrentWeatherUseCase.getCurrentWeather(lat, lng)
+            }
+        }
+    }
+
+    @Test
+    fun `getCurrentWeather should throw WeatherApiException when api failed`() {
+        testScope.runTest {
+            //Given
+            val lat = 80.1
+            val lng = 80.1
+
+            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.WeatherApiException("")
+
+            //when & then
+            assertThrows<WeatherException.WeatherApiException> {
+                getCurrentWeatherUseCase.getCurrentWeather(lat, lng)
+            }
+        }
+    }
 }
