@@ -10,4 +10,7 @@ open class ClothesExceptions(message: String) : ClothesSuggesterExceptions(messa
 
     class OutfitNotFoundException :
         ClothesExceptions("Outfit Not Found Exception")
+
+    class UnknownGenderException :
+        ClothesExceptions("Unknown gender Exception")
 }
