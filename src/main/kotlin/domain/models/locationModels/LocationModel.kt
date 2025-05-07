@@ -1,4 +1,4 @@
-package domain.models.location
+package domain.models.locationModels
 
 data class LocationModel(
     val ip: String,

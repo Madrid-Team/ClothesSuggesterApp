@@ -1,7 +1,7 @@
 package data.remote.responsmodels.locationModel
 
 
-import domain.models.location.LocationModel
+import domain.models.locationModels.LocationModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

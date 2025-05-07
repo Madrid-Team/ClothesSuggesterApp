@@ -1,6 +1,6 @@
 package domain.usecases.location
 
-import domain.models.location.LocationModel
+import domain.models.locationModels.LocationModel
 import domain.repositories.LocationRepository
 import domain.utils.exceptions.LocationException
 
