@@ -3,15 +3,14 @@ package domain.usecases.clothes
 import domain.models.clothesModels.ClothesItemModel
 import domain.models.clothesModels.ClothesModel
 import domain.repositories.ClothesRepository
-import domain.utils.exceptions.ClothesException
+import domain.utils.Gender
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 class GetWeeklyOutfitUseCaseTest {
     private lateinit var getWeeklyOutfitUseCase: GetWeeklyOutfitUseCase
@@ -30,7 +29,7 @@ class GetWeeklyOutfitUseCaseTest {
     fun `should return weekly male outfits for different temperatures`() {
         testScope.runTest {
             val temperatures = listOf("5.0", "10.0", "15.0")
-            val gender = "male"
+            val gender = Gender.MALE
 
             val expectedOutfits = listOf(
                 listOf(ClothesItemModel(id = 1, title = "Day1", description = "Winter Jacket")),
@@ -56,7 +55,7 @@ class GetWeeklyOutfitUseCaseTest {
     fun `should return weekly female outfits for different temperatures`() {
         testScope.runTest {
             val temperatures = listOf("25.0", "30.0", "35.0")
-            val gender = "female"
+            val gender = Gender.FEMALE
 
             val expectedOutfits = listOf(
                 listOf(ClothesItemModel(id = 4, title = "Day1", description = "Summer Dress")),
@@ -78,15 +77,4 @@ class GetWeeklyOutfitUseCaseTest {
         }
     }
 
-    @Test
-    fun `should throw exception for unknown gender`() {
-        testScope.runTest {
-            val temperatures = listOf("20.0", "22.0")
-            val gender = "robot"
-
-            assertThrows<ClothesException.ClothingDataException> {
-                getWeeklyOutfitUseCase.getWeeklyOutfit(temperatures, gender)
-            }
-        }
-    }
 }

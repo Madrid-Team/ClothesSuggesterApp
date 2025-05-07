@@ -3,6 +3,7 @@ package domain.usecases.clothes
 import domain.models.clothesModels.ClothesItemModel
 import domain.models.clothesModels.ClothesModel
 import domain.repositories.ClothesRepository
+import domain.utils.Gender
 import domain.utils.exceptions.ClothesException
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -29,7 +30,7 @@ class GetOutfitUseCaseTest {
     fun `should return male winter clothes for low temperature`() {
         testScope.runTest {
             val temp = "5.0"
-            val gender = "male"
+            val gender = Gender.MALE
             val expected =ClothesModel(
                 maleClothes = listOf(ClothesItemModel(id = 1, title = "", description = "Winter Jacket")),
                 femaleClothes = emptyList()
@@ -47,7 +48,7 @@ class GetOutfitUseCaseTest {
     fun `should return female summer clothes for high temperature`() {
         testScope.runTest {
             val temp = "50.0"
-            val gender = "female"
+            val gender = Gender.FEMALE
             val expected = ClothesModel(
                 maleClothes = emptyList(),
                 femaleClothes = listOf(ClothesItemModel(id = 1, title = "", description = "summer clothes"))
@@ -57,19 +58,6 @@ class GetOutfitUseCaseTest {
             val result = getOutfitUseCase.getDailyOutfit(temp, gender)
 
             assertEquals(expected.femaleClothes, result)
-        }
-    }
-
-    @Test
-    fun `should throw exception for unknown gender`() {
-        testScope.runTest {
-            val temp = "20.0"
-            val gender = "alien"
-            coEvery { clothesRepository.getAllOutfit(temp) } throws ClothesException.ClothingDataException("")
-
-            assertThrows<ClothesException.ClothingDataException> {
-                getOutfitUseCase.getDailyOutfit(temp, gender)
-            }
         }
     }
 
