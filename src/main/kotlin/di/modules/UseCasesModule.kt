@@ -10,6 +10,8 @@ import domain.usecases.weather.GetWeeklyWeatherUseCase
 import org.koin.dsl.module
 
 val useCasesModule = module {
+    single { GetOutfitUseCase(get()) }
+    single { GetWeeklyOutfitUseCase() }
     single { GetOutfitUseCase() }
     single { GetWeeklyOutfitUseCase(get()) }
     single { GetCurrentLocationUseCase(get()) }
