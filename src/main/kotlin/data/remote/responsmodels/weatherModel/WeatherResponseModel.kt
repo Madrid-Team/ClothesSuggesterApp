@@ -1,33 +1,33 @@
 package data.remote.responsmodels.weatherModel
 
-import com.google.gson.annotations.SerializedName
 import domain.models.weatherModels.WeatherModel
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
 @Serializable
 data class WeatherResponseModel(
-    @SerializedName("current")
+    @SerialName("current")
     val current: CurrentWeatherResponseModel,
-    @SerializedName("current_units")
+    @SerialName("current_units")
     val currentUnits: CurrentUnitsWeatherResponseModel,
-    @SerializedName("daily")
+    @SerialName("daily")
     val daily: DailyWeatherTemperatureResponseModel,
-    @SerializedName("daily_units")
+    @SerialName("daily_units")
     val dailyUnits: DailyUnitsWeatherTemperatureResponseModel,
-    @SerializedName("elevation")
+    @SerialName("elevation")
     val elevation: Double,
-    @SerializedName("generationtime_ms")
+    @SerialName("generationtime_ms")
     val generationTime: Double,
-    @SerializedName("latitude")
+    @SerialName("latitude")
     val latitude: Double,
-    @SerializedName("longitude")
+    @SerialName("longitude")
     val longitude: Double,
-    @SerializedName("timezone")
+    @SerialName("timezone")
     val timezone: String,
-    @SerializedName("timezone_abbreviation")
+    @SerialName("timezone_abbreviation")
     val timezoneAbbreviation: String,
-    @SerializedName("utc_offset_seconds")
+    @SerialName("utc_offset_seconds")
     val utcOffsetSeconds: Int
 ){
     fun toWeatherModel(): WeatherModel =

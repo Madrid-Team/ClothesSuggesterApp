@@ -1,19 +1,19 @@
 package data.remote.responsmodels.weatherModel
 
-import com.google.gson.annotations.SerializedName
 import domain.models.weatherModels.DailyWeatherTemperatureModel
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
 @Serializable
 data class DailyWeatherTemperatureResponseModel(
-    @SerializedName("temperature_2m_max")
+    @SerialName("temperature_2m_max")
     val temperatureMax: List<Double>,
-    @SerializedName("temperature_2m_min")
+    @SerialName("temperature_2m_min")
     val temperatureMin: List<Double>,
-    @SerializedName("time")
+    @SerialName("time")
     val time: List<String>,
-    @SerializedName("weather_code")
+    @SerialName("weather_code")
     val weatherCode: List<Int>
 ) {
     fun toDailyWeatherTemperatureModel(): DailyWeatherTemperatureModel =
