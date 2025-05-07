@@ -1,0 +1,3 @@
+package data.remote.datasource.weather
+
+class WeatherRemoteDataSourceTest
