@@ -13,7 +13,7 @@ val useCasesModule = module {
     single { GetOutfitUseCase(get()) }
     single { GetWeeklyOutfitUseCase() }
     single { GetCurrentLocationUseCase(get()) }
-    single { GetCurrentWeatherUseCase() }
+    single { GetCurrentWeatherUseCase(get()) }
     single { GetTomorrowWeatherUseCase() }
     single { GetWeeklyWeatherUseCase() }
 
