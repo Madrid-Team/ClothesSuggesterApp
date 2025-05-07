@@ -1,4 +1,6 @@
 package domain.usecases.clothes
 
-class GetWeeklyOutfitUseCase {
+import domain.repositories.ClothesRepository
+
+class GetWeeklyOutfitUseCase(private val clothesRepository: ClothesRepository) {
 }
