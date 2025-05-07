@@ -1,6 +1,6 @@
 package domain.utils
 
-import domain.utils.exceptions.ClothesExceptions
+import domain.utils.exceptions.ClothesException
 
 enum class Gender {
     MALE,
@@ -12,7 +12,7 @@ enum class Gender {
             return when (value.lowercase()) {
                 "male" -> MALE
                 "female" -> FEMALE
-                else -> throw ClothesExceptions.UnknownGenderException()
+                else -> throw ClothesException.UnknownGenderException("Unknown gender '$value'")
             }
 
         }
