@@ -4,6 +4,7 @@ package di.modules
 import domain.usecases.clothes.GetOutfitUseCase
 import domain.usecases.clothes.GetWeeklyOutfitUseCase
 import domain.usecases.location.GetCurrentLocationUseCase
+import domain.usecases.location.GetIpAddressUseCase
 import domain.usecases.weather.GetCurrentWeatherUseCase
 import domain.usecases.weather.GetTomorrowWeatherUseCase
 import domain.usecases.weather.GetWeeklyWeatherUseCase
@@ -16,6 +17,7 @@ val useCasesModule = module {
     single { GetWeeklyWeatherUseCase(get()) }
     single { GetCurrentWeatherUseCase(get()) }
     single { GetTomorrowWeatherUseCase(get()) }
+    single { GetIpAddressUseCase(get()) }
 
 }
 
