@@ -30,6 +30,28 @@ class GetCurrentWeatherUseCaseTest {
         testScope = TestScope()
 
     }
+    @Test
+    fun `get current weather should return current weather model when latitude and longitude are valid `(){
+        testScope.runTest {
+            //Given
+            val lat = 41.2
+            val lng = 62.3
+            val expectedWeatherModel = createWeatherModel()
+
+
+
+            coEvery { weatherRepository.getWeather(lat, lng) } returns expectedWeatherModel
+
+            //when
+            val result = getCurrentWeatherUseCase.getCurrentWeather(lat, lng)
+
+            //then
+            assertEquals(expectedWeatherModel.current, result)
+
+        }
+    }
+
+
 
 
 
