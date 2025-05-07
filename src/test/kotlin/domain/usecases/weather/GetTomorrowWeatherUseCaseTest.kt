@@ -50,12 +50,12 @@ class GetTomorrowWeatherUseCaseTest {
             val lng = 62.3
 
 
-            coEvery { weatherRepository.getWeather(lat, lng) } throws  WeatherException.WeatherDataException("")
+            coEvery { weatherRepository.getWeather(lat, lng) } throws  WeatherException.InvalidWeatherDataException("")
 
 
 
             //when & then
-            assertThrows<WeatherException.WeatherDataException> {
+            assertThrows<WeatherException.InvalidWeatherDataException> {
                 getTomorrowWeatherUseCase.getTomorrowWeather(lat, lng)
             }
 
@@ -70,10 +70,10 @@ class GetTomorrowWeatherUseCaseTest {
             //Given
             val lat = 80.1
             val lng = 192.1
-            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.WeatherDataException("")
+            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.InvalidWeatherDataException("")
 
             //when & then
-            assertThrows<WeatherException.WeatherDataException> {
+            assertThrows<WeatherException.InvalidWeatherDataException> {
                 getTomorrowWeatherUseCase.getTomorrowWeather(lat, lng)
             }
 
