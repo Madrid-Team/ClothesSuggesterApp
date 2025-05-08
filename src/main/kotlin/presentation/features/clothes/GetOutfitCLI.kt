@@ -13,12 +13,11 @@ class GetOutfitCLI(
     private val outputPrinter: OutputPrinter,
     private val getOutfitUseCase: GetOutfitUseCase
 ) {
-    suspend fun getOutfit(temp:String, gender:Gender): List<ClothesItemModel>? {
+    suspend fun getOutfit(temp:String, gender:Gender): List<ClothesItemModel> {
         return try {
             getOutfitUseCase.getDailyOutfit(temp,gender)
         } catch (e: ClothesException) {
-            outputPrinter.printError("${e.message}")
-            null
+            throw e
         }
     }
 }

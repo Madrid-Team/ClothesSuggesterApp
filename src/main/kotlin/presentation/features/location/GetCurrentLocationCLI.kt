@@ -11,12 +11,11 @@ class GetCurrentLocationCLI(
     private val outputPrinter: OutputPrinter,
     private val getCurrentLocationUseCase: GetCurrentLocationUseCase
 ) {
-    suspend fun getLocation(ip: String): LocationModel? {
+    suspend fun getLocation(ip: String): LocationModel {
         return try {
             getCurrentLocationUseCase.getCurrentLocation(ip)
         } catch (e: LocationException) {
-            outputPrinter.printError( "${e.message}")
-            null
+            throw e
         }
     }
 }

@@ -11,12 +11,11 @@ class GetIpAddressCLI(
     private val outputPrinter: OutputPrinter,
     private val getIpAddressUseCase: GetIpAddressUseCase
 ) {
-    suspend fun getIpAddress(): IpAddressModel? {
+    suspend fun getIpAddress(): IpAddressModel {
         return try {
             getIpAddressUseCase.getIpAddress()
         } catch (e: LocationException) {
-            outputPrinter.printError(" ${e.message}")
-            null
+            throw e
         }
     }
 }

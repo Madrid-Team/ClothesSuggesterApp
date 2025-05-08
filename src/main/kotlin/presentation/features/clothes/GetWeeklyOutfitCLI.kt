@@ -12,12 +12,11 @@ class GetWeeklyOutfitCLI(
     private val outputPrinter: OutputPrinter,
     private val getWeeklyOutfitUseCase: GetWeeklyOutfitUseCase
 ) {
-    suspend fun getWeeklyOutfit(tempList: List<String>, gender: Gender): List<List<ClothesItemModel>>? {
+    suspend fun getWeeklyOutfit(tempList: List<String>, gender: Gender): List<List<ClothesItemModel>> {
         return try {
             getWeeklyOutfitUseCase.getWeeklyOutfit(tempList,gender)
         } catch (e: ClothesException) {
-            outputPrinter.printError("${e.message}")
-            null
+            throw e
         }
     }
 }

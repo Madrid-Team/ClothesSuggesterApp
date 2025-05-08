@@ -1,6 +1,13 @@
 package presentation
 
+import domain.models.locationModels.LocationModel
 import domain.utils.Gender
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import presentation.components.InputReader
 import presentation.components.OutputPrinter
 import presentation.features.clothes.GetOutfitCLI
@@ -18,128 +25,197 @@ class ClothesSuggesterCLI(
     private val getCurrentWeatherCLI: GetCurrentWeatherCLI,
     private val getOutfitCLI: GetOutfitCLI,
     private val getWeeklyWeatherCLI: GetWeeklyWeatherCLI,
-    private val getWeeklyOutfitCLI: GetWeeklyOutfitCLI
+    private val getWeeklyOutfitCLI: GetWeeklyOutfitCLI,
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+
 ) {
-    suspend fun start() {
-        outputPrinter.printMessage("===============================================")
-        outputPrinter.printMessage("===============================================")
-        outputPrinter.printMessage("=== Welcome to Clothes Suggester App 😌 👋 ===")
-        outputPrinter.printMessage("===============================================")
-        outputPrinter.printMessage("===============================================")
+     fun start() {
+         printWelcomeMessage()
+
+         if (!getUserConsent()) {
+             return
+         }
+
+         val gender = getUserGender() ?: return
 
 
-        // Step 1: Location Consent
-        outputPrinter.printMessage("To suggest outfits, I need your location. 📍")
-        outputPrinter.printMessage("Enter 1 to agree ✅  or 0 to exit ❌.")
-        when (inputReader.readInput("Select an option: ")) {
-            "1" -> {}
-            "0" -> {
-                outputPrinter.printMessage("Application terminated. 👋")
-                return
-            }
+         val options = showMainMenu()
 
-            else -> {
-                outputPrinter.printError("⚠️ Invalid option.")
-                return
-            }
-        }
+         when (options) {
+             "1" -> {
+                 showTodayOutfit(gender)
+              }
+             "2" -> showWeeklyOutfit(gender)
+             "3" -> showTomorrowOutfit(gender)
+             else -> outputPrinter.printError("⚠️ Invalid option.")
+         }
 
-        outputPrinter.printMessage("Please select your gender 👤:")
-        outputPrinter.printMessage("1. Male ♂️")
-        outputPrinter.printMessage("2. Female ♀️")
 
-        val genderInput = inputReader.readInput("Enter 1 or 2: ")
-        val gender = when (genderInput) {
-            "1" -> Gender.MALE
-            "2" -> Gender.FEMALE
-            else -> {
-                outputPrinter.printError("⚠️ Invalid gender input.")
-                return
-            }
-        }
 
-        val ipModel = getIpAddressCLI.getIpAddress()
-        val location = ipModel?.ipAddress?.let { getCurrentLocationCLI.getLocation(it) }
-        if (location == null) {
-            outputPrinter.printError("❌ Failed to determine location.")
-            return
-        }
+    }
 
-        outputPrinter.printMessage("What would you like to see?")
-        outputPrinter.printMessage("1. Today's Outfit 👕")
-        outputPrinter.printMessage("2. Weekly Outfit 📅")
-        outputPrinter.printMessage("3. Tomorrow's Outfit 🌤️")
-        val option = inputReader.readInput("Enter your choice: ")
+    private suspend fun getLocation(): LocationModel {
+        outputPrinter.printMessage("⏳ Loading your outfit recommendation...")
+        outputPrinter.printMessage("🔍 Looking up your location...")
 
-        when (option) {
-            "1" -> {
-                val weather = getCurrentWeatherCLI.getCurrentWeather(location.latitude, location.longitude)
-                val tempCategory = getCurrentWeatherCLI.getTemperatureCategory(weather)
-                val outfit = getOutfitCLI.getOutfit(tempCategory, gender)
+        val ipModel = coroutineScope.async { getIpAddressCLI.getIpAddress() }.await()
+        val ipAddress = ipModel.ipAddress
+        outputPrinter.printMessage("🗺️ Determining your location...")
 
-                if (outfit != null) {
-                    outputPrinter.printMessage("🌡️ Current temperature: ${weather?.temperature}°C")
-                    outputPrinter.printMessage("👗 Your suggested outfit for today:")
-                    outfit.forEach {
-                        outputPrinter.printMessage("- ${it.title} (${it.description})")
-                    }
-                } else {
-                    outputPrinter.printError("❌ Could not fetch outfit.")
+        val location = coroutineScope.async { getCurrentLocationCLI.getLocation(ipAddress) }.await()
+        return location
+    }
+    private fun showTomorrowOutfit(gender: Gender) {
+        coroutineScope.launch {
+            try {
+
+                val location =getLocation()
+                outputPrinter.printMessage("🌤️ Checking current weather...")
+
+                val weeklyWeather = withContext(Dispatchers.IO) {
+                    getWeeklyWeatherCLI.getWeeklyWeather(location.latitude, location.longitude)
                 }
-            }
-
-            "2" -> {
-                val weeklyWeather = getWeeklyWeatherCLI.getWeeklyWeather(location.latitude, location.longitude)
-                if (weeklyWeather == null) {
-                    outputPrinter.printError("❌ Could not fetch weekly weather.")
-                    return
-                }
-
-                val tempCategories = getWeeklyWeatherCLI.getTemperatureCategories(weeklyWeather)
-                val weeklyOutfit = getWeeklyOutfitCLI.getWeeklyOutfit(tempCategories, gender)
-
-                if (weeklyOutfit != null) {
-                    outputPrinter.printMessage("👚 Your outfit suggestions for the week:")
-
-                    weeklyOutfit.forEachIndexed { index, dayOutfit ->
-                        val date = weeklyWeather.time.getOrNull(index) ?: "Day ${index + 1}"
-                        val temp = weeklyWeather.temperatureMax.getOrNull(index) ?: "-"
-                        outputPrinter.printMessage("\n📅 $date")
-                        outputPrinter.printMessage("🌡️ Temperature: $temp°C")
-                        dayOutfit.forEach {
-                            outputPrinter.printMessage("- ${it.title} (${it.description})")
-                        }
-                    }
-                } else {
-                    outputPrinter.printError("❌ Could not fetch weekly outfit.")
-                }
-            }
-            "3" -> {
-                val weeklyWeather = getWeeklyWeatherCLI.getWeeklyWeather(location.latitude, location.longitude)
-                if (weeklyWeather == null || weeklyWeather.temperatureMax.size < 2) {
+                if (weeklyWeather.temperatureMax.size < 2) {
                     outputPrinter.printError("❌ Could not fetch tomorrow's weather.")
-                    return
+                    return@launch
                 }
 
                 val tomorrowTemp = weeklyWeather.temperatureMax[1]
                 outputPrinter.printMessage("🌡️ Tomorrow's temperature: ${tomorrowTemp}°C")
 
                 val category = getWeeklyWeatherCLI.getTemperatureCategory(tomorrowTemp)
+                outputPrinter.printMessage("👕 Finding the perfect outfit...")
 
-                val outfit = getOutfitCLI.getOutfit(category, gender)
-                if (outfit != null) {
-                    outputPrinter.printMessage("👚 Your outfit suggestion for tomorrow:")
-                    outfit.forEach {
+                val outfit = coroutineScope.async { getOutfitCLI.getOutfit(category, gender) }.await()
+                outputPrinter.printMessage("👚 Your outfit suggestion for tomorrow:")
+                outfit.forEach {
+                    outputPrinter.printMessage("- ${it.title} (${it.description})")
+                }
+            } catch (e: Exception) {
+                outputPrinter.printError("❌ Error: ${e.message}")
+            }
+        }
+    }
+    private fun showWeeklyOutfit(gender: Gender) {
+        coroutineScope.launch {
+            try {
+
+                val location =getLocation()
+                outputPrinter.printMessage("🌤️ Checking current weather...")
+
+                val weeklyWeather =coroutineScope.async {
+                    getWeeklyWeatherCLI.getWeeklyWeather(location.latitude, location.longitude)
+                }.await()
+                outputPrinter.printMessage("👕 Finding the perfect outfit...")
+
+                val tempCategories = getWeeklyWeatherCLI.getTemperatureCategories(weeklyWeather)
+                val weeklyOutfit = coroutineScope.async {
+                    getWeeklyOutfitCLI.getWeeklyOutfit(tempCategories, gender)
+                }.await()
+
+                outputPrinter.printMessage("👚 Your outfit suggestions for the week:")
+
+                weeklyOutfit.forEachIndexed { index, dayOutfit ->
+                    val date = weeklyWeather.time.getOrNull(index) ?: "Day ${index + 1}"
+                    val temp = weeklyWeather.temperatureMax.getOrNull(index) ?: "-"
+                    outputPrinter.printMessage("\n📅 $date")
+                    outputPrinter.printMessage("🌡️ Temperature: $temp°C")
+                    dayOutfit.forEach {
                         outputPrinter.printMessage("- ${it.title} (${it.description})")
                     }
-                } else {
-                    outputPrinter.printError("❌ Could not fetch outfit for tomorrow.")
                 }
+            } catch (e: Exception) {
+                outputPrinter.printError("❌ Error: ${e.message}")
             }
+        }
+    }
+
+
+    private fun showTodayOutfit(gender: Gender) {
+
+          coroutineScope.launch {
+            try {
+
+                val location = getLocation()
+
+                 outputPrinter.printMessage("🌤️ Checking current weather...")
+                val weather = coroutineScope.async {
+                    getCurrentWeatherCLI.getCurrentWeather(location.latitude, location.longitude)
+                }.await()
+                val tempCategory = getCurrentWeatherCLI.getTemperatureCategory(weather)
+
+                 outputPrinter.printMessage("👕 Finding the perfect outfit...")
+                val outfit = coroutineScope.async { getOutfitCLI.getOutfit(tempCategory, gender) }.await()
+
+
+                outputPrinter.printMessage("🌡️ Current temperature: ${weather?.temperature}°C")
+                outputPrinter.printMessage("👗 Your suggested outfit for today:")
+                outfit.forEach {
+                    outputPrinter.printMessage("- ${it.title} (${it.description})")
+                }
+
+                 outputPrinter.printMessage("✅ Outfit recommendation complete!")
+            } catch (e: Exception) {
+                outputPrinter.printError("❌ Error: ${e.message}")
+            }
+        }
+
+    }
+
+
+    private fun showMainMenu(): String {
+        outputPrinter.printMessage("What would you like to see?")
+        outputPrinter.printMessage("1. Today's Outfit 👕")
+        outputPrinter.printMessage("2. Weekly Outfit 📅")
+        outputPrinter.printMessage("3. Tomorrow's Outfit 🌤️")
+        return inputReader.readInput("Enter your choice: ")
+    }
 
 
 
-            else -> outputPrinter.printError("⚠️ Invalid option.")
+
+    private fun getUserGender(): Gender? {
+        outputPrinter.printMessage("Please select your gender 👤:")
+        outputPrinter.printMessage("1. Male ♂️")
+        outputPrinter.printMessage("2. Female ♀️")
+
+        val genderInput = inputReader.readInput("Enter 1 or 2: ")
+        return when (genderInput) {
+            "1" -> Gender.MALE
+            "2" -> Gender.FEMALE
+            else -> {
+                outputPrinter.printError("⚠️ Invalid gender input.")
+                println("Press Enter when you're done to exit...")
+
+                null
+            }
+        }
+    }
+
+    private fun printWelcomeMessage() {
+        outputPrinter.printMessage("===============================================")
+        outputPrinter.printMessage("===============================================")
+        outputPrinter.printMessage("=== Welcome to Clothes Suggester App 😌 👋 ===")
+        outputPrinter.printMessage("===============================================")
+        outputPrinter.printMessage("===============================================")
+    }
+    private fun getUserConsent(): Boolean {
+        outputPrinter.printMessage("To suggest outfits, I need your location. 📍")
+        outputPrinter.printMessage("Enter 1 to agree ✅  or 0 to exit ❌.")
+
+        return when (inputReader.readInput("Select an option: ")) {
+            "1" -> true
+            "0" -> {
+                outputPrinter.printMessage("Application terminated. 👋")
+                false
+            }
+            else -> {
+                outputPrinter.printError("⚠️ Invalid option.")
+                println("Press Enter when you're done to exit...")
+                false
+            }
         }
     }
 }
+
+
