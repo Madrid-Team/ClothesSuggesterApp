@@ -1,14 +1,15 @@
 package data.repositories
 
 import data.remote.datasource.location.LocationDataSource
-import data.remote.responsmodels.locationModel.LocationResponseModel
 import domain.models.locationModels.LocationModel
+import domain.utils.exceptions.LocationException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class LocationRepositoryImplTest{
   private lateinit var locationDataSource: LocationDataSource
@@ -48,6 +49,14 @@ class LocationRepositoryImplTest{
         )
 
         assertEquals(expected, result)
+    }
+    @Test
+    fun `getCurrentLocation throws LocationApiException when datasource fails`() = runTest {
+        coEvery { locationDataSource.getCurrentLocation(any()) } throws RuntimeException("Network error")
+
+        assertThrows<LocationException.LocationApiException> {
+            repository.getCurrentLocation("invalid-ip")
+        }
     }
 
 }
