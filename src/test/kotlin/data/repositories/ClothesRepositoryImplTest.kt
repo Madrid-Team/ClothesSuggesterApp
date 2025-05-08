@@ -25,5 +25,33 @@ class ClothesRepositoryImplTest {
     }
 
 
-    
+    @Test
+    fun `getAllOutfit returns correct ClothesModel when datasource succeeds`() = runTest {
+        // Given
+        val fakeResponse = ClothesResponseModel(
+            maleClothes = listOf(
+                ClothesItemResponseModel("desc1", 1, "T-Shirt")
+            ),
+            femaleClothes = listOf(
+                ClothesItemResponseModel("desc2", 2, "Dress")
+            )
+        )
+
+        coEvery { clothesDataSource.getAllOutfit("800") } returns fakeResponse
+
+        // When
+        val result = repository.getAllOutfit("800")
+
+        // Then
+        val expected = ClothesModel(
+            femaleClothes = listOf(
+                ClothesItemModel("desc2", 2, "Dress")
+            ),
+            maleClothes = listOf(
+                ClothesItemModel("desc1", 1, "T-Shirt")
+            )
+        )
+
+        assertEquals(expected, result)
+    }
 }
