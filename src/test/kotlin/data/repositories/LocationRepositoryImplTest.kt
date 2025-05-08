@@ -33,7 +33,7 @@ class LocationRepositoryImplTest{
             countryName = "Egypt",
             latitude = 30.0444,
             longitude = 31.2357,
-            region = "Cairo"
+
         )
         coEvery { locationDataSource.getCurrentLocation("192.168.1.1") } returns fakeResponse
 
@@ -47,7 +47,7 @@ class LocationRepositoryImplTest{
             countryName = "Egypt",
             latitude = 30.0444,
             longitude = 31.2357,
-            region = "Cairo"
+
         )
 
         assertEquals(expected, result)

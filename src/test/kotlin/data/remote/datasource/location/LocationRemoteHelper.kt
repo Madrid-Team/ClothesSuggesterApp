@@ -26,7 +26,6 @@ fun createLocationRemoteModel(ipAddress: String): LocationResponseModel {
         longitude = 0.0,
         network = "",
         org = "",
-        region = "",
         regionCode = "",
         timezone = "",
         utcOffset = "",
