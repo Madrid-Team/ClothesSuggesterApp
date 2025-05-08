@@ -5,12 +5,14 @@ import data.remote.responsmodels.clothesModel.ClothesItemResponseModel
 import data.remote.responsmodels.clothesModel.ClothesResponseModel
 import domain.models.clothesModels.ClothesItemModel
 import domain.models.clothesModels.ClothesModel
+import domain.utils.exceptions.ClothesException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.assertThrows
 
 class ClothesRepositoryImplTest {
     private lateinit var clothesDataSource: ClothesDataSource
@@ -53,5 +55,16 @@ class ClothesRepositoryImplTest {
         )
 
         assertEquals(expected, result)
+    }
+
+
+    @Test
+    fun `getAllOutfit throws ClothesException when datasource fails`() = runTest {
+        // Given
+        coEvery { clothesDataSource.getAllOutfit(any()) } throws RuntimeException("Network error")
+        // When & Then
+        assertThrows<ClothesException.ClothesApiException> {
+            repository.getAllOutfit("500")
+        }
     }
 }
