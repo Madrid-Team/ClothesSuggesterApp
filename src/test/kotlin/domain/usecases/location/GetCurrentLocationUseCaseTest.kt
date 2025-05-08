@@ -35,7 +35,6 @@ class GetCurrentLocationUseCaseTest {
                 countryName = "United States",
                 latitude = 37.386,
                 longitude = -122.0838,
-                region = "California"
             )
             coEvery { locationRepository.getCurrentLocation(ipAddress) } returns expectedLocation
             // When

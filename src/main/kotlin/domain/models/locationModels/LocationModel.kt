@@ -6,5 +6,4 @@ data class LocationModel(
     val countryName: String,
     val latitude: Double,
     val longitude: Double,
-    val region: String,
-)
+ )

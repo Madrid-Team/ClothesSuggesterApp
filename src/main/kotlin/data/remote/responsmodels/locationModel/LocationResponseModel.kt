@@ -49,8 +49,6 @@ data class LocationResponseModel(
     val network: String,
     @SerialName("org")
     val org: String,
-    @SerialName("region")
-    val region: String,
     @SerialName("region_code")
     val regionCode: String,
     @SerialName("timezone")
@@ -65,7 +63,6 @@ data class LocationResponseModel(
             ip = this.ip,
             latitude = this.latitude,
             longitude = this.longitude,
-            region = this.region,
             city = this.city,
             countryName = this.countryName,
         )
