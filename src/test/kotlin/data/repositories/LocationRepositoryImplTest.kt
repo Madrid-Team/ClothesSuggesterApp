@@ -1,6 +1,8 @@
 package data.repositories
 
 import data.remote.datasource.location.LocationDataSource
+import data.remote.responsmodels.locationModel.IpAddressResponseModel
+import domain.models.locationModels.IpAddressModel
 import domain.models.locationModels.LocationModel
 import domain.utils.exceptions.LocationException
 import io.mockk.coEvery
@@ -58,5 +60,19 @@ class LocationRepositoryImplTest{
             repository.getCurrentLocation("invalid-ip")
         }
     }
+    @Test
+    fun `getIpAddress returns correct IpAddressModel when datasource succeeds`() = runTest {
+        // Given
+        val fakeResponse = IpAddressResponseModel(ipAddress = "8.8.8.8")
 
+        coEvery { locationDataSource.getIpAddress() } returns fakeResponse
+
+        // When
+        val result = repository.getIpAddress()
+
+        // Then
+        val expected = IpAddressModel(ipAddress = "8.8.8.8")
+
+        assertEquals(expected, result)
+    }
 }
