@@ -75,4 +75,12 @@ class LocationRepositoryImplTest{
 
         assertEquals(expected, result)
     }
+    @Test
+    fun `getIpAddress throws LocationApiException when datasource fails`() = runTest {
+        coEvery { locationDataSource.getIpAddress() } throws RuntimeException("API error")
+
+        assertThrows<LocationException.LocationApiException> {
+            repository.getIpAddress()
+        }
+    }
 }
