@@ -10,8 +10,8 @@ class GetWeeklyWeatherUseCase (
 
     suspend fun getWeeklyWeather(): DailyWeatherTemperatureModel {
         try {
-            val weather = weatherRepository.getWeather()
-            return weather.daily
+            val dailyWeather = weatherRepository.getWeather().daily
+            return dailyWeather
         } catch (e: WeatherException) {
             throw e
         }

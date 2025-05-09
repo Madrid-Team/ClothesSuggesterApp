@@ -1,91 +1,61 @@
 package presentation
 
-import domain.models.locationModels.LocationModel
+import data.utils.getTemperatureCategories
+import domain.usecases.clothes.GetWeeklyOutfitUseCase
+import domain.usecases.weather.GetWeeklyWeatherUseCase
 import domain.utils.Gender
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import presentation.components.InputReader
 import presentation.components.OutputPrinter
 import presentation.features.clothes.GetOutfitCLI
-import presentation.features.clothes.GetWeeklyOutfitCLI
 import presentation.features.weather.GetCurrentWeatherCLI
-import presentation.features.weather.GetWeeklyWeatherCLI
 
 class ClothesSuggesterCLI(
     private val inputReader: InputReader,
     private val outputPrinter: OutputPrinter,
     private val getCurrentWeatherCLI: GetCurrentWeatherCLI,
     private val getOutfitCLI: GetOutfitCLI,
-    private val getWeeklyWeatherCLI: GetWeeklyWeatherCLI,
-    private val getWeeklyOutfitCLI: GetWeeklyOutfitCLI,
+    private val getWeeklyWeatherUseCase: GetWeeklyWeatherUseCase,
+    private val getWeeklyOutfitUseCase: GetWeeklyOutfitUseCase,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
 ) {
-     fun start() {
-         printWelcomeMessage()
+    fun start() {
+        printWelcomeMessage()
 
-         if (!getUserConsent()) {
-             return
-         }
-
-         val gender = getUserGender() ?: return
-
-
-         val options = showMainMenu()
-
-         when (options) {
-             "1" -> {
-                 showTodayOutfit(gender)
-              }
-             "2" -> showWeeklyOutfit(gender)
-             "3" -> showTomorrowOutfit(gender)
-             else -> outputPrinter.printError("⚠️ Invalid option.")
-         }
-
-
-
-    }
-
-    private fun showTomorrowOutfit(gender: Gender) {
-        coroutineScope.launch {
-            try {
-
-                 outputPrinter.printMessage("🌤️ Checking current weather...")
-
-                val weeklyWeather = withContext(Dispatchers.IO) {
-                    getWeeklyWeatherCLI.getWeeklyWeather()
-                }
-                if (weeklyWeather.temperatureMax.size < 2) {
-                    outputPrinter.printError("❌ Could not fetch tomorrow's weather.")
-                    return@launch
-                }
-
-                val tomorrowTemp = weeklyWeather.temperatureMax[1]
-                outputPrinter.printMessage("🌡️ Tomorrow's temperature: ${tomorrowTemp}°C")
-
-                val category = getWeeklyWeatherCLI.getTemperatureCategory(tomorrowTemp)
-                outputPrinter.printMessage("👕 Finding the perfect outfit...")
-
-                val outfit = coroutineScope.async { getOutfitCLI.getOutfit(category, gender) }.await()
-                outputPrinter.printMessage("👚 Your outfit suggestion for tomorrow:")
-                outfit.forEach {
-                    outputPrinter.printMessage("- ${it.title} (${it.description})")
-                }
-            } catch (e: Exception) {
-                outputPrinter.printError("❌ Error: ${e.message}")
-            }
+        if (!getUserConsent()) {
+            return
         }
+
+        val gender = getUserGender() ?: return
+
+
+        val options = showMainMenu()
+
+        when (options) {
+            "1" -> showTodayOutfit(gender)
+            "2" -> showWeeklyOutfit(gender)
+            else -> outputPrinter.printError("⚠️ Invalid option.")
+        }
+
+
     }
+
+
     private fun showWeeklyOutfit(gender: Gender) {
         coroutineScope.launch {
             try {
 
                 outputPrinter.printMessage("🌤️ Checking current weather...")
-                val weeklyWeather =  getWeeklyWeatherCLI.getWeeklyWeather()
+                val weeklyWeather = getWeeklyWeatherUseCase.getWeeklyWeather()
 
                 outputPrinter.printMessage("👕 Finding the perfect outfit...")
 
-                val tempCategories = getWeeklyWeatherCLI.getTemperatureCategories(weeklyWeather)
-                val weeklyOutfit =  getWeeklyOutfitCLI.getWeeklyOutfit(tempCategories, gender)
+                val tempCategories = getTemperatureCategories(weeklyWeather)
+                val weeklyOutfit = getWeeklyOutfitUseCase.getWeeklyOutfit(tempCategories,gender)
 
                 outputPrinter.printMessage("👚 Your outfit suggestions for the week:")
 
@@ -94,27 +64,27 @@ class ClothesSuggesterCLI(
                     val temp = weeklyWeather.temperatureMax[index]
                     outputPrinter.printMessage("\n📅 $date")
                     outputPrinter.printMessage("🌡️ Temperature: $temp°C")
-                    dayOutfit.forEach {
-                        outputPrinter.printMessage("- ${it.title} (${it.description})")
-                    }
+                    outputPrinter.printMessage("- ${dayOutfit[index].title} (${dayOutfit[index].description})")
+
                 }
             } catch (e: Exception) {
                 outputPrinter.printError("❌ Error: ${e.message}")
             }
         }
     }
+
     private fun showTodayOutfit(gender: Gender) {
 
-          coroutineScope.launch {
+        coroutineScope.launch {
             try {
 
-                 outputPrinter.printMessage("🌤️ Checking current weather...")
+                outputPrinter.printMessage("🌤️ Checking current weather...")
                 val weather = coroutineScope.async {
                     getCurrentWeatherCLI.getCurrentWeather()
                 }.await()
                 val tempCategory = getCurrentWeatherCLI.getTemperatureCategory(weather)
 
-                 outputPrinter.printMessage("👕 Finding the perfect outfit...")
+                outputPrinter.printMessage("👕 Finding the perfect outfit...")
                 val outfit = coroutineScope.async { getOutfitCLI.getOutfit(tempCategory, gender) }.await()
 
 
@@ -124,7 +94,7 @@ class ClothesSuggesterCLI(
                     outputPrinter.printMessage("- ${it.title} (${it.description})")
                 }
 
-                 outputPrinter.printMessage("✅ Outfit recommendation complete!")
+                outputPrinter.printMessage("✅ Outfit recommendation complete!")
             } catch (e: Exception) {
                 outputPrinter.printError("❌ Error: ${e.message}")
             }
@@ -137,11 +107,8 @@ class ClothesSuggesterCLI(
         outputPrinter.printMessage("What would you like to see?")
         outputPrinter.printMessage("1. Today's Outfit 👕")
         outputPrinter.printMessage("2. Weekly Outfit 📅")
-        outputPrinter.printMessage("3. Tomorrow's Outfit 🌤️")
         return inputReader.readInput("Enter your choice: ")
     }
-
-
 
 
     private fun getUserGender(): Gender? {
@@ -169,6 +136,7 @@ class ClothesSuggesterCLI(
         outputPrinter.printMessage("===============================================")
         outputPrinter.printMessage("===============================================")
     }
+
     private fun getUserConsent(): Boolean {
         outputPrinter.printMessage("To suggest outfits, I need your location. 📍")
         outputPrinter.printMessage("Enter 1 to agree ✅  or 0 to exit ❌.")
@@ -179,6 +147,7 @@ class ClothesSuggesterCLI(
                 outputPrinter.printMessage("Application terminated. 👋")
                 false
             }
+
             else -> {
                 outputPrinter.printError("⚠️ Invalid option.")
                 println("Press Enter when you're done to exit...")
