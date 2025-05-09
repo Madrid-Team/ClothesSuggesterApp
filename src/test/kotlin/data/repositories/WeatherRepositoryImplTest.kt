@@ -3,10 +3,10 @@ package data.repositories
 import data.remote.datasource.location.LocationDataSource
 import data.remote.datasource.weather.WeatherDataSource
 import data.remote.responsmodels.locationModel.IpAddressResponseModel
-import data.repositories.helpers.createLocationResponseModel
 import data.repositories.helpers.createIpResponseModel
-import domain.models.locationModels.IpAddressModel
-import domain.models.locationModels.LocationModel
+import data.repositories.helpers.createLocationResponseModel
+import domain.entities.locationEntity.IpAddress
+import domain.entities.locationEntity.Location
 import domain.usecases.weather.createWeatherModel
 import domain.usecases.weather.createWeatherResponseModel
 import domain.utils.exceptions.LocationException
@@ -29,7 +29,7 @@ class WeatherRepositoryImplTest {
         weatherDataSource = mockk(relaxed = true)
         locationDataSource = mockk(relaxed = true)
         repository = WeatherRepositoryImpl(
-            weatherDataSource,locationDataSource
+            weatherDataSource, locationDataSource
         )
     }
 
@@ -49,7 +49,7 @@ class WeatherRepositoryImplTest {
         )
 
         coEvery { locationDataSource.getIpAddress() } returns fakeIp
-        coEvery { locationDataSource.getCurrentLocation("192.168.1.1")} returns fakeLocation
+        coEvery { locationDataSource.getCurrentLocation("192.168.1.1") } returns fakeLocation
         coEvery { weatherDataSource.getWeather(30.0, 31.0) } returns fakeResponse
 
         // When
@@ -79,6 +79,7 @@ class WeatherRepositoryImplTest {
             repository.getWeather()
         }
     }
+
     @Test
     fun `getCurrentLocation returns correct LocationModel when datasource succeeds`() = runTest {
         // Given
@@ -98,7 +99,7 @@ class WeatherRepositoryImplTest {
         val result = repository.getLocation()
 
         // Then
-        val expected = LocationModel(
+        val expected = Location(
             ip = "192.168.1.1",
             city = "Cairo",
             countryName = "Egypt",
@@ -109,6 +110,7 @@ class WeatherRepositoryImplTest {
 
         assertEquals(expected, result)
     }
+
     @Test
     fun `getCurrentLocation throws LocationApiException when datasource fails`() = runTest {
         coEvery { locationDataSource.getCurrentLocation(any()) } throws RuntimeException("Network error")
@@ -117,6 +119,7 @@ class WeatherRepositoryImplTest {
             repository.getLocation()
         }
     }
+
     @Test
     fun `getIpAddress returns correct IpAddressModel when datasource succeeds`() = runTest {
         // Given
@@ -128,10 +131,11 @@ class WeatherRepositoryImplTest {
         val result = repository.getIpAddress()
 
         // Then
-        val expected = IpAddressModel(ipAddress = "8.8.8.8")
+        val expected = IpAddress(ipAddress = "8.8.8.8")
 
         assertEquals(expected, result)
     }
+
     @Test
     fun `getIpAddress throws LocationApiException when datasource fails`() = runTest {
         coEvery { locationDataSource.getIpAddress() } throws RuntimeException("API error")

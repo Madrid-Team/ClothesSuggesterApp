@@ -4,9 +4,9 @@ import data.remote.datasource.location.LocationDataSource
 import data.remote.datasource.weather.WeatherDataSource
 import data.utils.toLocationExceptions
 import data.utils.toWeatherException
-import domain.models.locationModels.IpAddressModel
-import domain.models.locationModels.LocationModel
-import domain.models.weatherModels.WeatherModel
+import domain.entities.locationEntity.IpAddress
+import domain.entities.locationEntity.Location
+import domain.entities.weatherEntity.Weather
 import domain.repositories.WeatherRepository
 
 class WeatherRepositoryImpl(
@@ -15,7 +15,7 @@ class WeatherRepositoryImpl(
 
 ) : WeatherRepository {
     override suspend fun getWeather(
-    ): WeatherModel {
+    ): Weather {
         try {
             val newLatitude = getLocation().latitude
             val newLongitude = getLocation().longitude
@@ -26,7 +26,7 @@ class WeatherRepositoryImpl(
         }
     }
 
-    internal suspend fun getIpAddress(): IpAddressModel {
+    internal suspend fun getIpAddress(): IpAddress {
         return try {
             locationRepository.getIpAddress().toIpAddressModel()
         }catch (exception: Exception) {
@@ -34,7 +34,7 @@ class WeatherRepositoryImpl(
         }
     }
 
-    internal suspend fun getLocation(): LocationModel {
+    internal suspend fun getLocation(): Location {
         return try {
             val ipAddress = getIpAddress().ipAddress
             locationRepository.getCurrentLocation(ipAddress).toLocationModel()

@@ -1,10 +1,10 @@
 package domain.usecases.weather
 
 import data.remote.responsmodels.weatherModel.*
-import domain.models.weatherModels.*
+import domain.entities.weatherEntity.*
 
 fun createWeatherModel(
-    current: CurrentWeatherModel = CurrentWeatherModel(
+    current: CurrentWeather = CurrentWeather(
         cloudCover = 0,
         interval = 0,
         isDay = 1,
@@ -18,7 +18,7 @@ fun createWeatherModel(
         weatherCode = 0,
         windSpeed = 0.0
     ),
-    currentUnits: CurrentUnitsWeatherModel = CurrentUnitsWeatherModel(
+    currentUnits: CurrentUnitsWeather = CurrentUnitsWeather(
         cloudCover = "%",
         interval = "min",
         isDay = "boolean",
@@ -32,13 +32,13 @@ fun createWeatherModel(
         weatherCode = "code",
         windSpeed = "km/h"
     ),
-    daily: DailyWeatherTemperatureModel = DailyWeatherTemperatureModel(
+    daily: DailyWeather = DailyWeather(
         temperatureMax = listOf(),
         temperatureMin = listOf(),
         time = listOf(),
         weatherCode = listOf()
     ),
-    dailyUnits: DailyUnitsWeatherTemperatureModel = DailyUnitsWeatherTemperatureModel(
+    dailyUnits: DailyUnitsWeather = DailyUnitsWeather(
         temperatureMax = "°C",
         temperatureMin = "°C",
         time = "ISO8601",
@@ -51,8 +51,8 @@ fun createWeatherModel(
     timezone: String = "UTC",
     timezoneAbbreviation: String = "UTC",
     utcOffsetSeconds: Int = 0
-): WeatherModel {
-    return WeatherModel(
+): Weather {
+    return Weather(
         current = current,
         currentUnits = currentUnits,
         daily = daily,

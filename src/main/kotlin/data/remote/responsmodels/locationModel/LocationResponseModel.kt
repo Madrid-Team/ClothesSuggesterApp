@@ -1,7 +1,7 @@
 package data.remote.responsmodels.locationModel
 
 
-import domain.models.locationModels.LocationModel
+import domain.entities.locationEntity.Location
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -58,8 +58,8 @@ data class LocationResponseModel(
     @SerialName("version")
     val version: String
 ) {
-    fun toLocationModel(): LocationModel =
-        LocationModel(
+    fun toLocationModel(): Location =
+        Location(
             ip = this.ip,
             latitude = this.latitude,
             longitude = this.longitude,

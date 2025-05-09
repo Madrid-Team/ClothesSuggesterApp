@@ -1,8 +1,8 @@
 package data.utils
 
-import domain.models.weatherModels.DailyWeatherTemperatureModel
+import domain.entities.weatherEntity.DailyWeather
 
-fun getTemperatureCategories(weeklyWeather: DailyWeatherTemperatureModel): List<String> {
+fun getTemperatureCategories(weeklyWeather: DailyWeather): List<String> {
     return weeklyWeather.temperatureMax.map { temp ->
         when (temp.toInt()) {
             in 0..10 -> "cold.json"

@@ -1,6 +1,6 @@
-package domain.models.clothesModels
+package domain.entities.clothesEntity
 
-data class ClothesItemModel(
+data class ClothesItem(
     val description: String,
     val id: Int,
     val title: String

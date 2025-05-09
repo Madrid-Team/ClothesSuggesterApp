@@ -1,6 +1,6 @@
 package data.remote.responsmodels.weatherModel
 
-import domain.models.weatherModels.DailyUnitsWeatherTemperatureModel
+import domain.entities.weatherEntity.DailyUnitsWeather
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,8 +16,8 @@ data class DailyUnitsWeatherTemperatureResponseModel(
     @SerialName("weather_code")
     val weatherCode: String
 ){
-    fun toDailyUnitsWeatherTemperatureModel():DailyUnitsWeatherTemperatureModel =
-        DailyUnitsWeatherTemperatureModel(
+    fun toDailyUnitsWeatherTemperatureModel():DailyUnitsWeather =
+        DailyUnitsWeather(
             temperatureMax = this.temperatureMax,
             temperatureMin = this.temperatureMin,
             time = this.time,
