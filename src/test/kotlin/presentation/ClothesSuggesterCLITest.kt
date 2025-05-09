@@ -112,5 +112,30 @@ class ClothesSuggesterCLITest {
     }
 
 
+    @Test
+    fun `should show weekly outfit when user selects option 2`() {
+        every { inputReader.readInput(any()) } returnsMany listOf("1", "1", "2")
+
+        val weeklyWeather = DailyWeather(
+            temperatureMax = listOf(22.0, 25.0, 28.0, 30.0, 26.0, 24.0, 23.0),
+            temperatureMin = listOf(15.0, 17.0, 18.0, 19.0, 17.0, 16.0, 15.0),
+            time = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+            weatherCode = listOf(1, 1, 1, 1, 1, 1, 1)
+        )
+
+        coEvery { getWeeklyWeatherUseCase.getWeeklyWeather() } returns weeklyWeather
+
+        coEvery { getWeeklyOutfitUseCase.getWeeklyOutfit(any(), any()) } returns List(7) {
+            listOf(
+                ClothesItem("Shirt", 1, "Casual shirt")
+            )
+        }
+
+        clothesSuggesterCLI.start()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        verify { outputPrinter.printMessage(match { it.contains("Shirt") }) }
+    }
+
 
 }
