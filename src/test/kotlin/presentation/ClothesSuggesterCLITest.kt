@@ -147,5 +147,14 @@ class ClothesSuggesterCLITest {
         verify { outputPrinter.printError("⚠️ Invalid gender input.") }
     }
 
+    @Test
+    fun `should terminate when user doesn't consent`() {
+        every { inputReader.readInput(any()) } returns "0" // no consent
+
+        clothesSuggesterCLI.start()
+
+        verify { outputPrinter.printMessage("Application terminated. 👋") }
+    }
+
 
 }
