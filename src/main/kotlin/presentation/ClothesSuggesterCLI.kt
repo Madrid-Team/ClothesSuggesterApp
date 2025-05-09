@@ -9,6 +9,7 @@ import domain.utils.getTemperatureCategories
 import domain.utils.getTemperatureCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import presentation.components.InputReader
 import presentation.components.OutputPrinter
@@ -49,8 +50,8 @@ class ClothesSuggesterCLI(
     private fun showWeeklyOutfit(gender: Gender) {
         coroutineScope.launch {
             try {
+                displayRequestProgress()
 
-                outputPrinter.printMessage(String.checkCurrentWeather)
                 val weeklyWeather = getWeeklyWeatherUseCase.getWeeklyWeather()
 
                 outputPrinter.printMessage(gender.getDressImoje() + String.perfectOutfit)
@@ -66,7 +67,8 @@ class ClothesSuggesterCLI(
                     outputPrinter.printMessage("\n📅 $date")
                     outputPrinter.printMessage(String.temperature.format(temp))
                     outputPrinter.printMessage(
-                        "- ${dayOutfit[index].title.replace("+", "and")} \n\t${dayOutfit[index].description}\n")
+                        "- ${dayOutfit[index].title.replace("+", "and")} \n\t${dayOutfit[index].description}\n"
+                    )
                 }
                 outputPrinter.printMessage(String.recommendationComplete)
 
@@ -80,8 +82,8 @@ class ClothesSuggesterCLI(
 
         coroutineScope.launch {
             try {
+                displayRequestProgress()
 
-                outputPrinter.printMessage(String.checkCurrentWeather)
                 val weather = getCurrentWeatherUseCase.getCurrentWeather()
 
                 val tempCategory = getTemperatureCategory(weather.temperature)
@@ -94,7 +96,8 @@ class ClothesSuggesterCLI(
                 outputPrinter.printMessage(gender.getDressImoje() + String.todaySuggestions)
                 val randomOutfit = outfit.random()
                 outputPrinter.printMessage(
-                    "- ${randomOutfit.title.replace("+", "and")} \n\t${randomOutfit.description}\n")
+                    "- ${randomOutfit.title.replace("+", "and")} \n\t${randomOutfit.description}\n"
+                )
 
                 outputPrinter.printMessage(String.recommendationComplete)
             } catch (e: Exception) {
@@ -155,6 +158,14 @@ class ClothesSuggesterCLI(
                 false
             }
         }
+    }
+
+    private suspend fun displayRequestProgress() {
+        outputPrinter.printMessage(String.processingRequest)
+        delay(500)
+        outputPrinter.printMessage(String.lookingUpLocation)
+        delay(500)
+        outputPrinter.printMessage(String.checkCurrentWeather)
     }
 }
 
