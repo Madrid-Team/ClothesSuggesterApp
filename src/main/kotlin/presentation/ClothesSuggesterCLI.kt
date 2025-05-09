@@ -1,23 +1,25 @@
 package presentation
 
 import data.utils.getTemperatureCategories
+import data.utils.getTemperatureCategory
+import domain.usecases.clothes.GetOutfitUseCase
 import domain.usecases.clothes.GetWeeklyOutfitUseCase
+import domain.usecases.weather.GetCurrentWeatherUseCase
 import domain.usecases.weather.GetWeeklyWeatherUseCase
 import domain.utils.Gender
+import domain.utils.exceptions.ClothesException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import presentation.components.InputReader
 import presentation.components.OutputPrinter
-import presentation.features.clothes.GetOutfitCLI
-import presentation.features.weather.GetCurrentWeatherCLI
 
 class ClothesSuggesterCLI(
     private val inputReader: InputReader,
     private val outputPrinter: OutputPrinter,
-    private val getCurrentWeatherCLI: GetCurrentWeatherCLI,
-    private val getOutfitCLI: GetOutfitCLI,
+    private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase,
+    private val getOutfitUseCase: GetOutfitUseCase,
     private val getWeeklyWeatherUseCase: GetWeeklyWeatherUseCase,
     private val getWeeklyOutfitUseCase: GetWeeklyOutfitUseCase,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
@@ -55,7 +57,7 @@ class ClothesSuggesterCLI(
                 outputPrinter.printMessage("👕 Finding the perfect outfit...")
 
                 val tempCategories = getTemperatureCategories(weeklyWeather)
-                val weeklyOutfit = getWeeklyOutfitUseCase.getWeeklyOutfit(tempCategories,gender)
+                val weeklyOutfit = getWeeklyOutfitUseCase.getWeeklyOutfit(tempCategories, gender)
 
                 outputPrinter.printMessage("👚 Your outfit suggestions for the week:")
 
@@ -80,18 +82,22 @@ class ClothesSuggesterCLI(
 
                 outputPrinter.printMessage("🌤️ Checking current weather...")
                 val weather = coroutineScope.async {
-                    getCurrentWeatherCLI.getCurrentWeather()
+                    getCurrentWeatherUseCase.getCurrentWeather()
                 }.await()
-                val tempCategory = getCurrentWeatherCLI.getTemperatureCategory(weather)
+                val tempCategory = getTemperatureCategory(weather.temperature)
 
                 outputPrinter.printMessage("👕 Finding the perfect outfit...")
-                val outfit = coroutineScope.async { getOutfitCLI.getOutfit(tempCategory, gender) }.await()
+                val outfit = coroutineScope.async { getOutfitUseCase.getDailyOutfit(tempCategory, gender) }.await()
 
 
                 outputPrinter.printMessage("🌡️ Current temperature: ${weather.temperature}°C")
                 outputPrinter.printMessage("👗 Your suggested outfit for today:")
-                outfit.forEach {
-                    outputPrinter.printMessage("- ${it.title} (${it.description})")
+                val randomOutfit = outfit.random()
+                outputPrinter.printMessage("- ${randomOutfit.title} (${randomOutfit.description})")
+                val option = inputReader.readInput("- Enter 1 for another suggestion or enter to exit")
+                when (option) {
+                    "1" -> outputPrinter.printMessage("- ${randomOutfit.title} (${randomOutfit.description})")
+                    else -> outputPrinter.printError("❌ Error: Invalid option.")
                 }
 
                 outputPrinter.printMessage("✅ Outfit recommendation complete!")
