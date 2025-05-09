@@ -9,7 +9,7 @@ class GetOutfitUseCase(private val clothesRepository: ClothesRepository) {
     suspend fun getDailyOutfit(temperature: String, gender: Gender): List<ClothesItemModel> {
         return try {
             val outfit = clothesRepository.getAllOutfit(temperature)
-             when (gender) {
+            when (gender) {
                 Gender.MALE -> outfit.maleClothes
                 Gender.FEMALE -> outfit.femaleClothes
             }
