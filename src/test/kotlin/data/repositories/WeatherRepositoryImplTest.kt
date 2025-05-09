@@ -41,7 +41,7 @@ class WeatherRepositoryImplTest {
         coEvery { weatherDataSource.getWeather(30.0, 31.0) } returns fakeResponse
 
         // When
-        val result = repository.getWeather(30.0, 31.0)
+        val result = repository.getWeather()
 
         // Then
         val expected = createWeatherModel(
@@ -64,7 +64,7 @@ class WeatherRepositoryImplTest {
 
         // Then
         assertThrows<WeatherException.WeatherApiException> {
-            repository.getWeather(30.0, 31.0)
+            repository.getWeather()
         }
     }
 }

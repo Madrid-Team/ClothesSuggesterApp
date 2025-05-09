@@ -34,7 +34,7 @@ class GetCurrentWeatherUseCaseTest {
 
 
 
-            coEvery { weatherRepository.getWeather(lat, lng) } returns expectedWeatherModel
+            coEvery { weatherRepository.getWeather() } returns expectedWeatherModel
 
             //when
             val result = getCurrentWeatherUseCase.getCurrentWeather(lat, lng)
@@ -52,7 +52,7 @@ class GetCurrentWeatherUseCaseTest {
             val lat = 112.5
             val lng = 62.3
 
-            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.InvalidWeatherDataException("")
+            coEvery { weatherRepository.getWeather() } throws WeatherException.InvalidWeatherDataException("")
 
             //when & then
             assertThrows<WeatherException.InvalidWeatherDataException> {
@@ -68,7 +68,7 @@ class GetCurrentWeatherUseCaseTest {
             val lat = 80.1
             val lng = 192.1
 
-            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.InvalidWeatherDataException("")
+            coEvery { weatherRepository.getWeather() } throws WeatherException.InvalidWeatherDataException("")
 
             //when & then
             assertThrows<WeatherException.InvalidWeatherDataException> {
@@ -84,7 +84,7 @@ class GetCurrentWeatherUseCaseTest {
             val lat = 80.1
             val lng = 80.1
 
-            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.WeatherNetworkException("")
+            coEvery { weatherRepository.getWeather() } throws WeatherException.WeatherNetworkException("")
 
             //when & then
             assertThrows<WeatherException.WeatherNetworkException> {
@@ -100,7 +100,7 @@ class GetCurrentWeatherUseCaseTest {
             val lat = 80.1
             val lng = 80.1
 
-            coEvery { weatherRepository.getWeather(lat, lng) } throws WeatherException.WeatherApiException("")
+            coEvery { weatherRepository.getWeather() } throws WeatherException.WeatherApiException("")
 
             //when & then
             assertThrows<WeatherException.WeatherApiException> {

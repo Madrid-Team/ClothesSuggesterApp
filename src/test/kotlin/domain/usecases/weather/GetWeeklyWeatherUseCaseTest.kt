@@ -39,7 +39,7 @@ class GetWeeklyWeatherUseCaseTest {
 
         val fakeWeather = createWeatherModel(daily = expectedDaily)
 
-        coEvery { weatherRepository.getWeather(latitude, longitude) } returns fakeWeather
+        coEvery { weatherRepository.getWeather() } returns fakeWeather
 
         val result = getWeeklyWeatherUseCase.getWeeklyWeather(latitude, longitude)
 
