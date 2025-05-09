@@ -22,8 +22,15 @@ val String.Companion.recommendationComplete: String
 
 val String.Companion.error: String
     get() =  "❌ Error: %s"
+
 val String.Companion.invalidOption: String
     get() =  "⚠️ Invalid option."
+
+val String.Companion.processingRequest: String
+    get() =  "⚙️ Processing your request, please wait..."
+
+val String.Companion.lookingUpLocation: String
+    get() = "🔍 Looking up your location..."
 
 fun Gender.getDressImoje():String{
     return when(this){
