@@ -7,7 +7,6 @@ import domain.usecases.clothes.GetWeeklyOutfitUseCase
 import domain.usecases.weather.GetCurrentWeatherUseCase
 import domain.usecases.weather.GetWeeklyWeatherUseCase
 import domain.utils.Gender
-import domain.utils.exceptions.ClothesException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -94,11 +93,6 @@ class ClothesSuggesterCLI(
                 outputPrinter.printMessage("👗 Your suggested outfit for today:")
                 val randomOutfit = outfit.random()
                 outputPrinter.printMessage("- ${randomOutfit.title} (${randomOutfit.description})")
-                val option = inputReader.readInput("- Enter 1 for another suggestion or enter to exit")
-                when (option) {
-                    "1" -> outputPrinter.printMessage("- ${randomOutfit.title} (${randomOutfit.description})")
-                    else -> outputPrinter.printError("❌ Error: Invalid option.")
-                }
 
                 outputPrinter.printMessage("✅ Outfit recommendation complete!")
             } catch (e: Exception) {
