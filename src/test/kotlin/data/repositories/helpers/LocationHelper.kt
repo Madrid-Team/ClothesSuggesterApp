@@ -1,4 +1,4 @@
-package data.repositories
+package data.repositories.helpers
 
 import data.remote.responsmodels.locationModel.LocationResponseModel
 
