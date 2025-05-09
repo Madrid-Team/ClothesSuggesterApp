@@ -1,6 +1,6 @@
 package data.remote.responsmodels.weatherModel
 
-import domain.models.weatherModels.WeatherModel
+import domain.entities.weatherEntity.Weather
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -30,8 +30,8 @@ data class WeatherResponseModel(
     @SerialName("utc_offset_seconds")
     val utcOffsetSeconds: Int
 ){
-    fun toWeatherModel(): WeatherModel =
-        WeatherModel(
+    fun toWeatherModel(): Weather =
+        Weather(
             current = this.current.toCurrentWeatherModel(),
             currentUnits = this.currentUnits.toCurrentUnitsWeatherModel(),
             daily = this.daily.toDailyWeatherTemperatureModel(),

@@ -1,6 +1,5 @@
 package data.remote.datasource.location
 
-import data.remote.requestmodels.IpAddressRequestModel
 import data.remote.responsmodels.locationModel.IpAddressResponseModel
 import data.remote.responsmodels.locationModel.LocationResponseModel
 

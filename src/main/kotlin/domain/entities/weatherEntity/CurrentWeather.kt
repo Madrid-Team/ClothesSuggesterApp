@@ -1,6 +1,6 @@
-package domain.models.weatherModels
+package domain.entities.weatherEntity
 
-data class CurrentWeatherModel(
+data class CurrentWeather(
     val cloudCover: Int,
     val interval: Int,
     val isDay: Int,

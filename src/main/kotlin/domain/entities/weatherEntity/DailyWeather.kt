@@ -1,6 +1,6 @@
-package domain.models.weatherModels
+package domain.entities.weatherEntity
 
-data class DailyWeatherTemperatureModel(
+data class DailyWeather(
     val temperatureMax: List<Double>,
     val temperatureMin: List<Double>,
     val time: List<String>,

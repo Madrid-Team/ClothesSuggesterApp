@@ -1,7 +1,7 @@
 package domain.repositories
 
-import domain.models.clothesModels.ClothesModel
+import domain.entities.clothesEntity.Clothes
 
 interface ClothesRepository {
-    suspend fun getAllOutfit(weatherCode: String): ClothesModel
+    suspend fun getAllOutfit(weatherCode: String): Clothes
 }

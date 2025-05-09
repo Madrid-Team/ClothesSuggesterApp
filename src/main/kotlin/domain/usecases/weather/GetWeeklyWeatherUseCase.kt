@@ -1,6 +1,6 @@
 package domain.usecases.weather
 
-import domain.models.weatherModels.DailyWeatherTemperatureModel
+import domain.entities.weatherEntity.DailyWeather
 import domain.repositories.WeatherRepository
 import domain.utils.exceptions.WeatherException
 
@@ -8,10 +8,10 @@ class GetWeeklyWeatherUseCase (
     private val weatherRepository: WeatherRepository
 ) {
 
-    suspend fun getWeeklyWeather(latitude: Double, longitude: Double): DailyWeatherTemperatureModel {
+    suspend fun getWeeklyWeather(): DailyWeather {
         try {
-            val weather = weatherRepository.getWeather(latitude, longitude)
-            return weather.daily
+            val dailyWeather = weatherRepository.getWeather().daily
+            return dailyWeather
         } catch (e: WeatherException) {
             throw e
         }

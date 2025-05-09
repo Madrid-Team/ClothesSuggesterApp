@@ -3,8 +3,8 @@ package data.repositories
 import data.remote.datasource.clothes.ClothesDataSource
 import data.remote.responsmodels.clothesModel.ClothesItemResponseModel
 import data.remote.responsmodels.clothesModel.ClothesResponseModel
-import domain.models.clothesModels.ClothesItemModel
-import domain.models.clothesModels.ClothesModel
+import domain.entities.clothesEntity.Clothes
+import domain.entities.clothesEntity.ClothesItem
 import domain.utils.exceptions.ClothesException
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -45,12 +45,12 @@ class ClothesRepositoryImplTest {
         val result = repository.getAllOutfit("800")
 
         // Then
-        val expected = ClothesModel(
+        val expected = Clothes(
             femaleClothes = listOf(
-                ClothesItemModel("desc2", 2, "Dress")
+                ClothesItem("desc2", 2, "Dress")
             ),
             maleClothes = listOf(
-                ClothesItemModel("desc1", 1, "T-Shirt")
+                ClothesItem("desc1", 1, "T-Shirt")
             )
         )
 

@@ -1,6 +1,6 @@
-package domain.models.locationModels
+package domain.entities.locationEntity
 
-data class LocationModel(
+data class Location(
     val ip: String,
     val city: String,
     val countryName: String,

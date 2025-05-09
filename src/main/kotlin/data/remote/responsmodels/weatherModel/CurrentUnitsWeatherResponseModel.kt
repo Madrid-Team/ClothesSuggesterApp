@@ -1,6 +1,6 @@
 package data.remote.responsmodels.weatherModel
 
-import domain.models.weatherModels.CurrentUnitsWeatherModel
+import domain.entities.weatherEntity.CurrentUnitsWeather
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,8 +31,8 @@ data class CurrentUnitsWeatherResponseModel(
     @SerialName("wind_speed_10m")
     val windSpeed: String
 ) {
-    fun toCurrentUnitsWeatherModel(): CurrentUnitsWeatherModel =
-        CurrentUnitsWeatherModel(
+    fun toCurrentUnitsWeatherModel(): CurrentUnitsWeather =
+        CurrentUnitsWeather(
             cloudCover = this.cloudCover,
             interval = this.interval,
             isDay = this.isDay,

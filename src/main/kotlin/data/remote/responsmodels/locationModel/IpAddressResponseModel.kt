@@ -1,6 +1,6 @@
 package data.remote.responsmodels.locationModel
 
-import domain.models.locationModels.IpAddressModel
+import domain.entities.locationEntity.IpAddress
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,8 +9,8 @@ data class IpAddressResponseModel(
     @SerialName("ip")
     val ipAddress: String,
 ) {
-    fun toIpAddressModel(): IpAddressModel =
-        IpAddressModel(
+    fun toIpAddressModel(): IpAddress =
+        IpAddress(
             ipAddress = this.ipAddress,
         )
 }

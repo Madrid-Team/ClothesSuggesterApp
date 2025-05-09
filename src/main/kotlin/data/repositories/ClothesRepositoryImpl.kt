@@ -2,13 +2,14 @@ package data.repositories
 
 import data.remote.datasource.clothes.ClothesDataSource
 import data.utils.toClothesExceptions
-import domain.models.clothesModels.ClothesModel
+import domain.entities.clothesEntity.Clothes
 import domain.repositories.ClothesRepository
 
 class ClothesRepositoryImpl(
-    private val clothesDataSource: ClothesDataSource
+    private val clothesDataSource: ClothesDataSource,
+
 ) : ClothesRepository {
-    override suspend fun getAllOutfit(weatherCode: String): ClothesModel {
+    override suspend fun getAllOutfit(weatherCode: String): Clothes {
         try {
             val result = clothesDataSource.getAllOutfit(weatherCode)
             return result.toClothesModel()
@@ -17,4 +18,6 @@ class ClothesRepositoryImpl(
             throw exception.toClothesExceptions()
         }
     }
+
+
 }

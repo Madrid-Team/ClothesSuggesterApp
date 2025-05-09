@@ -1,7 +1,7 @@
 package domain.usecases.clothes
 
-import domain.models.clothesModels.ClothesItemModel
-import domain.models.clothesModels.ClothesModel
+import domain.entities.clothesEntity.Clothes
+import domain.entities.clothesEntity.ClothesItem
 import domain.repositories.ClothesRepository
 import domain.utils.Gender
 import io.mockk.coEvery
@@ -32,13 +32,13 @@ class GetWeeklyOutfitUseCaseTest {
             val gender = Gender.MALE
 
             val expectedOutfits = listOf(
-                listOf(ClothesItemModel(id = 1, title = "Day1", description = "Winter Jacket")),
-                listOf(ClothesItemModel(id = 2, title = "Day2", description = "Coat")),
-                listOf(ClothesItemModel(id = 3, title = "Day3", description = "Sweater"))
+                listOf(ClothesItem(id = 1, title = "Day1", description = "Winter Jacket")),
+                listOf(ClothesItem(id = 2, title = "Day2", description = "Coat")),
+                listOf(ClothesItem(id = 3, title = "Day3", description = "Sweater"))
             )
 
             temperatures.forEachIndexed { index, temp ->
-                val model = ClothesModel(
+                val model = Clothes(
                     maleClothes = expectedOutfits[index],
                     femaleClothes = emptyList()
                 )
@@ -58,13 +58,13 @@ class GetWeeklyOutfitUseCaseTest {
             val gender = Gender.FEMALE
 
             val expectedOutfits = listOf(
-                listOf(ClothesItemModel(id = 4, title = "Day1", description = "Summer Dress")),
-                listOf(ClothesItemModel(id = 5, title = "Day2", description = "Light Blouse")),
-                listOf(ClothesItemModel(id = 6, title = "Day3", description = "T-shirt"))
+                listOf(ClothesItem(id = 4, title = "Day1", description = "Summer Dress")),
+                listOf(ClothesItem(id = 5, title = "Day2", description = "Light Blouse")),
+                listOf(ClothesItem(id = 6, title = "Day3", description = "T-shirt"))
             )
 
             temperatures.forEachIndexed { index, temp ->
-                val model = ClothesModel(
+                val model = Clothes(
                     maleClothes = emptyList(),
                     femaleClothes = expectedOutfits[index]
                 )

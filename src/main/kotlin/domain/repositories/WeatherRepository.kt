@@ -1,8 +1,8 @@
 package domain.repositories
 
-import domain.models.weatherModels.WeatherModel
+import domain.entities.weatherEntity.Weather
 
 interface WeatherRepository {
-    suspend fun getWeather(latitude: Double, longitude: Double): WeatherModel
+    suspend fun getWeather(): Weather
 
 }
