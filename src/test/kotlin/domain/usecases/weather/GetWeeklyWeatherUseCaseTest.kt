@@ -1,9 +1,7 @@
 package domain.usecases.weather
 
 import domain.models.weatherModels.DailyWeatherTemperatureModel
-import domain.models.weatherModels.WeatherModel
 import domain.repositories.WeatherRepository
-import domain.utils.exceptions.WeatherException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
@@ -27,8 +25,6 @@ class GetWeeklyWeatherUseCaseTest {
 
     @Test
     fun `should return daily weather from repository`() = testScope.runTest {
-        val latitude = 30.0
-        val longitude = 31.0
 
         val expectedDaily = DailyWeatherTemperatureModel(
             temperatureMax = listOf(13.9, 11.1, 9.8, 9.9, 8.9, 8.3, 9.9),
@@ -41,7 +37,7 @@ class GetWeeklyWeatherUseCaseTest {
 
         coEvery { weatherRepository.getWeather() } returns fakeWeather
 
-        val result = getWeeklyWeatherUseCase.getWeeklyWeather(latitude, longitude)
+        val result = getWeeklyWeatherUseCase.getWeeklyWeather()
 
         assertEquals(expectedDaily, result)
     }
