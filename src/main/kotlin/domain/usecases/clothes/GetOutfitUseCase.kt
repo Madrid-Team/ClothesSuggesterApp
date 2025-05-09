@@ -17,7 +17,5 @@ class GetOutfitUseCase(private val clothesRepository: ClothesRepository) {
             throw e
         }
 
-
-
     }
 }
