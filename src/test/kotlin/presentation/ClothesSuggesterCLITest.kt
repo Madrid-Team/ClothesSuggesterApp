@@ -138,4 +138,14 @@ class ClothesSuggesterCLITest {
     }
 
 
+    @Test
+    fun `should print error message for invalid gender input`() {
+        every { inputReader.readInput(any()) } returnsMany listOf("1", "3") // consent = 1, gender = 3
+
+        clothesSuggesterCLI.start()
+
+        verify { outputPrinter.printError("⚠️ Invalid gender input.") }
+    }
+
+
 }
