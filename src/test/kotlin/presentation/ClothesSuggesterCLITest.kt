@@ -156,5 +156,14 @@ class ClothesSuggesterCLITest {
         verify { outputPrinter.printMessage("Application terminated. 👋") }
     }
 
+    @Test
+    fun `should print error message on exception in showTodayOutfit`() {
+        every { inputReader.readInput(any()) } returnsMany listOf("1", "1", "1")
+        coEvery { getCurrentWeatherUseCase.getCurrentWeather() } throws RuntimeException("Something went wrong")
 
+        clothesSuggesterCLI.start()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        verify { outputPrinter.printError(match { it.contains("Something went wrong") }) }
+    }
 }
