@@ -2,26 +2,17 @@ package presentation
 
 import domain.models.locationModels.LocationModel
 import domain.utils.Gender
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import presentation.components.InputReader
 import presentation.components.OutputPrinter
 import presentation.features.clothes.GetOutfitCLI
 import presentation.features.clothes.GetWeeklyOutfitCLI
-import presentation.features.location.GetCurrentLocationCLI
-import presentation.features.location.GetIpAddressCLI
 import presentation.features.weather.GetCurrentWeatherCLI
 import presentation.features.weather.GetWeeklyWeatherCLI
 
 class ClothesSuggesterCLI(
     private val inputReader: InputReader,
     private val outputPrinter: OutputPrinter,
-    private val getIpAddressCLI: GetIpAddressCLI,
-    private val getCurrentLocationCLI: GetCurrentLocationCLI,
     private val getCurrentWeatherCLI: GetCurrentWeatherCLI,
     private val getOutfitCLI: GetOutfitCLI,
     private val getWeeklyWeatherCLI: GetWeeklyWeatherCLI,
@@ -54,26 +45,14 @@ class ClothesSuggesterCLI(
 
     }
 
-    private suspend fun getLocation(): LocationModel {
-        outputPrinter.printMessage("⏳ Loading your outfit recommendation...")
-        outputPrinter.printMessage("🔍 Looking up your location...")
-
-        val ipModel = coroutineScope.async { getIpAddressCLI.getIpAddress() }.await()
-        val ipAddress = ipModel.ipAddress
-        outputPrinter.printMessage("🗺️ Determining your location...")
-
-        val location = coroutineScope.async { getCurrentLocationCLI.getLocation(ipAddress) }.await()
-        return location
-    }
     private fun showTomorrowOutfit(gender: Gender) {
         coroutineScope.launch {
             try {
 
-                val location =getLocation()
-                outputPrinter.printMessage("🌤️ Checking current weather...")
+                 outputPrinter.printMessage("🌤️ Checking current weather...")
 
                 val weeklyWeather = withContext(Dispatchers.IO) {
-                    getWeeklyWeatherCLI.getWeeklyWeather(location.latitude, location.longitude)
+                    getWeeklyWeatherCLI.getWeeklyWeather()
                 }
                 if (weeklyWeather.temperatureMax.size < 2) {
                     outputPrinter.printError("❌ Could not fetch tomorrow's weather.")
@@ -100,24 +79,19 @@ class ClothesSuggesterCLI(
         coroutineScope.launch {
             try {
 
-                val location =getLocation()
                 outputPrinter.printMessage("🌤️ Checking current weather...")
+                val weeklyWeather =  getWeeklyWeatherCLI.getWeeklyWeather()
 
-                val weeklyWeather =coroutineScope.async {
-                    getWeeklyWeatherCLI.getWeeklyWeather(location.latitude, location.longitude)
-                }.await()
                 outputPrinter.printMessage("👕 Finding the perfect outfit...")
 
                 val tempCategories = getWeeklyWeatherCLI.getTemperatureCategories(weeklyWeather)
-                val weeklyOutfit = coroutineScope.async {
-                    getWeeklyOutfitCLI.getWeeklyOutfit(tempCategories, gender)
-                }.await()
+                val weeklyOutfit =  getWeeklyOutfitCLI.getWeeklyOutfit(tempCategories, gender)
 
                 outputPrinter.printMessage("👚 Your outfit suggestions for the week:")
 
                 weeklyOutfit.forEachIndexed { index, dayOutfit ->
-                    val date = weeklyWeather.time.getOrNull(index) ?: "Day ${index + 1}"
-                    val temp = weeklyWeather.temperatureMax.getOrNull(index) ?: "-"
+                    val date = weeklyWeather.time[index] + " Day ${index + 1}"
+                    val temp = weeklyWeather.temperatureMax[index]
                     outputPrinter.printMessage("\n📅 $date")
                     outputPrinter.printMessage("🌡️ Temperature: $temp°C")
                     dayOutfit.forEach {
@@ -129,18 +103,14 @@ class ClothesSuggesterCLI(
             }
         }
     }
-
-
     private fun showTodayOutfit(gender: Gender) {
 
           coroutineScope.launch {
             try {
 
-                val location = getLocation()
-
                  outputPrinter.printMessage("🌤️ Checking current weather...")
                 val weather = coroutineScope.async {
-                    getCurrentWeatherCLI.getCurrentWeather(location.latitude, location.longitude)
+                    getCurrentWeatherCLI.getCurrentWeather()
                 }.await()
                 val tempCategory = getCurrentWeatherCLI.getTemperatureCategory(weather)
 
@@ -148,7 +118,7 @@ class ClothesSuggesterCLI(
                 val outfit = coroutineScope.async { getOutfitCLI.getOutfit(tempCategory, gender) }.await()
 
 
-                outputPrinter.printMessage("🌡️ Current temperature: ${weather?.temperature}°C")
+                outputPrinter.printMessage("🌡️ Current temperature: ${weather.temperature}°C")
                 outputPrinter.printMessage("👗 Your suggested outfit for today:")
                 outfit.forEach {
                     outputPrinter.printMessage("- ${it.title} (${it.description})")

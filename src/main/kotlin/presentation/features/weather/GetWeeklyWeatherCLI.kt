@@ -12,9 +12,9 @@ class GetWeeklyWeatherCLI (
     private val outputPrinter: OutputPrinter,
     private val getWeeklyWeatherUseCase: GetWeeklyWeatherUseCase
 ){
-    suspend fun getWeeklyWeather(latitude: Double, longitude : Double): DailyWeatherTemperatureModel {
+    suspend fun getWeeklyWeather(): DailyWeatherTemperatureModel {
         return try {
-            getWeeklyWeatherUseCase.getWeeklyWeather(latitude,longitude)
+            getWeeklyWeatherUseCase.getWeeklyWeather()
         } catch (e: WeatherException) {
             throw e
         }

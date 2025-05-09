@@ -11,12 +11,11 @@ class GetCurrentWeatherCLI(
     private val outputPrinter: OutputPrinter,
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase
 ) {
-    suspend fun getCurrentWeather(latitude: Double, longitude : Double): CurrentWeatherModel? {
+    suspend fun getCurrentWeather( ): CurrentWeatherModel  {
         return try {
-            getCurrentWeatherUseCase.getCurrentWeather(latitude, longitude)
+            getCurrentWeatherUseCase.getCurrentWeather( )
         } catch (e: WeatherException) {
-            outputPrinter.printError("${e.message}")
-            null
+          throw e
         }
     }
      fun getTemperatureCategory(weatherModel: CurrentWeatherModel?): String {
