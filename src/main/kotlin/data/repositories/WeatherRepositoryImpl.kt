@@ -26,7 +26,7 @@ class WeatherRepositoryImpl(
         }
     }
 
-    private suspend fun getIpAddress(): IpAddressModel {
+    internal suspend fun getIpAddress(): IpAddressModel {
         return try {
             locationRepository.getIpAddress().toIpAddressModel()
         }catch (exception: Exception) {
@@ -34,7 +34,7 @@ class WeatherRepositoryImpl(
         }
     }
 
-    private suspend fun getLocation(): LocationModel {
+    internal suspend fun getLocation(): LocationModel {
         return try {
             val ipAddress = getIpAddress().ipAddress
             locationRepository.getCurrentLocation(ipAddress).toLocationModel()
