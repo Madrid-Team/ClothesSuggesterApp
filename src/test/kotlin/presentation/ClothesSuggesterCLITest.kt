@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import io.mockk.verify
+import presentation.utils.invalidOption
+import presentation.utils.recommendationComplete
 
 class ClothesSuggesterCLITest {
     private lateinit var inputReader: InputReader
@@ -166,4 +168,41 @@ class ClothesSuggesterCLITest {
 
         verify { outputPrinter.printError(match { it.contains("Something went wrong") }) }
     }
+
+    @Test
+    fun `should print error message for invalid menu option`() {
+        every { inputReader.readInput(any()) } returnsMany listOf("1", "1", "5") // consent, gender, invalid option
+
+        clothesSuggesterCLI.start()
+
+        verify { outputPrinter.printError(String.invalidOption) }
+    }
+
+    @Test
+    fun `should print recommendation complete message for today's outfit`() {
+        every { inputReader.readInput(any()) } returnsMany listOf("1", "1", "1")
+        coEvery { getCurrentWeatherUseCase.getCurrentWeather() } returns CurrentWeather(
+            cloudCover = 0,
+            interval = 1,
+            isDay = 1,
+            precipitation = 0.0,
+            rain = 0.0,
+            relativeHumidity = 50,
+            showers = 0.0,
+            snowfall = 0.0,
+            temperature = 23.0,
+            time = "2025-05-09T12:00",
+            weatherCode = 1,
+            windSpeed = 5.0
+        )
+        coEvery { getOutfitUseCase.getDailyOutfit(any(), any()) } returns listOf(
+            ClothesItem("Jacket", 1, "Warm and stylish.")
+        )
+
+        clothesSuggesterCLI.start()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        verify { outputPrinter.printMessage(String.recommendationComplete) }
+    }
+
 }
