@@ -17,9 +17,8 @@ class WeatherRepositoryImpl(
     override suspend fun getWeather(
     ): Weather {
         try {
-            val newLatitude = getLocation().latitude
-            val newLongitude = getLocation().longitude
-            val result = weatherDataSource.getWeather(latitude = newLatitude, longitude = newLongitude)
+            val location = getLocation()
+            val result = weatherDataSource.getWeather(latitude = location.latitude, longitude = location.longitude)
             return result.toWeather()
         } catch (exception: Exception) {
             throw exception.toWeatherException()
