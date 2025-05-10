@@ -1,7 +1,7 @@
 package data.remote.datasource.clothes
 
-import data.remote.responsmodels.clothesModel.ClothesResponseModel
+import data.remote.dtos.clothesDto.ClothesDto
 
 interface ClothesDataSource {
-    suspend fun getAllOutfit(weatherCode: String): ClothesResponseModel
+    suspend fun getAllOutfit(weatherCode: String): ClothesDto
 }

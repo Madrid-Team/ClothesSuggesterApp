@@ -1,11 +1,11 @@
-package data.remote.responsmodels.clothesModel
+package data.remote.dtos.clothesDto
 
 import domain.entities.clothesEntity.ClothesItem
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ClothesItemResponseModel(
+data class ClothesItemDto(
     @SerialName("description")
     val description: String,
     @SerialName("id")
@@ -13,7 +13,7 @@ data class ClothesItemResponseModel(
     @SerialName("title")
     val title: String
 ){
-    fun toClothesItemModel(): ClothesItem =
+    fun toClothesItem(): ClothesItem =
         ClothesItem(
             id = this.id,
             description = this.description,

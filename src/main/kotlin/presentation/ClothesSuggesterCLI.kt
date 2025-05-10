@@ -4,7 +4,7 @@ import domain.usecases.clothes.GetOutfitUseCase
 import domain.usecases.clothes.GetWeeklyOutfitUseCase
 import domain.usecases.weather.GetCurrentWeatherUseCase
 import domain.usecases.weather.GetWeeklyWeatherUseCase
-import domain.utils.Gender
+import domain.enums.Gender
 import domain.utils.getTemperatureCategories
 import domain.utils.getTemperatureCategory
 import kotlinx.coroutines.CoroutineScope
@@ -71,7 +71,7 @@ class ClothesSuggesterCLI(
                     )
                 }
                 outputPrinter.printMessage(String.recommendationComplete)
-
+                showFireworks()
             } catch (e: Exception) {
                 outputPrinter.printError(String.error.format(e))
             }
@@ -100,6 +100,7 @@ class ClothesSuggesterCLI(
                 )
 
                 outputPrinter.printMessage(String.recommendationComplete)
+                showFireworks()
             } catch (e: Exception) {
                 outputPrinter.printError(String.error.format(e))
             }
@@ -134,11 +135,16 @@ class ClothesSuggesterCLI(
     }
 
     private fun printWelcomeMessage() {
-        outputPrinter.printMessage("===============================================")
-        outputPrinter.printMessage("===============================================")
-        outputPrinter.printMessage("=== Welcome to Clothes Suggester App 😌 👋 ===")
-        outputPrinter.printMessage("===============================================")
-        outputPrinter.printMessage("===============================================")
+        val border = "═".repeat(50)
+        val emptyBorder = " ".repeat(50)
+        outputPrinter.printMessage("╔$border╗")
+        outputPrinter.printMessage("║$emptyBorder║")
+        outputPrinter.printMessage("║$emptyBorder║")
+        outputPrinter.printMessage("║    Welcome to Clothes Suggester App 😌 👋       \uD83D\uDCAB")
+        outputPrinter.printMessage("║$emptyBorder║")
+        outputPrinter.printMessage("║$emptyBorder║")
+        outputPrinter.printMessage("╚$border╝")
+
     }
 
     private fun getUserConsent(): Boolean {
@@ -167,6 +173,22 @@ class ClothesSuggesterCLI(
         delay(500)
         outputPrinter.printMessage(String.checkCurrentWeather)
     }
+
+    private fun showFireworks() {
+        val fireworks = listOf(
+            "       🎆        🎇        🎆",
+            "    *     *   *     *   *     *",
+            "  *   💥   * *  💫  * *   🎉  *",
+            "    *     *   *     *   *     *",
+            "       🎆        🎇        🎆",
+        )
+
+        fireworks.forEach {
+            outputPrinter.printMessage(it)
+            Thread.sleep(300) // Pause for effect
+        }
+    }
+
 }
 
 

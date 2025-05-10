@@ -1,8 +1,8 @@
 package data.repositories
 
 import data.remote.datasource.clothes.ClothesDataSource
-import data.remote.responsmodels.clothesModel.ClothesItemResponseModel
-import data.remote.responsmodels.clothesModel.ClothesResponseModel
+import data.remote.dtos.clothesDto.ClothesItemDto
+import data.remote.dtos.clothesDto.ClothesDto
 import domain.entities.clothesEntity.Clothes
 import domain.entities.clothesEntity.ClothesItem
 import domain.utils.exceptions.ClothesException
@@ -30,12 +30,12 @@ class ClothesRepositoryImplTest {
     @Test
     fun `getAllOutfit returns correct ClothesModel when datasource succeeds`() = runTest {
         // Given
-        val fakeResponse = ClothesResponseModel(
+        val fakeResponse = ClothesDto(
             maleClothes = listOf(
-                ClothesItemResponseModel("desc1", 1, "T-Shirt")
+                ClothesItemDto("desc1", 1, "T-Shirt")
             ),
             femaleClothes = listOf(
-                ClothesItemResponseModel("desc2", 2, "Dress")
+                ClothesItemDto("desc2", 2, "Dress")
             )
         )
 
