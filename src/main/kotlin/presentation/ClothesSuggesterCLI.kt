@@ -185,7 +185,7 @@ class ClothesSuggesterCLI(
 
         fireworks.forEach {
             outputPrinter.printMessage(it)
-            Thread.sleep(300) // Pause for effect
+            Thread.sleep(300)
         }
     }
 
