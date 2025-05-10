@@ -1,4 +1,4 @@
-package domain.utils
+package domain.enums
 
 import domain.entities.clothesEntity.Clothes
 import domain.entities.clothesEntity.ClothesItem

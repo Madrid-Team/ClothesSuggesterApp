@@ -2,7 +2,7 @@ package domain.usecases.clothes
 
 import domain.entities.clothesEntity.ClothesItem
 import domain.repositories.ClothesRepository
-import domain.utils.Gender
+import domain.enums.Gender
 
 class GetWeeklyOutfitUseCase(private val clothesRepository: ClothesRepository) {
     suspend fun getWeeklyOutfit(tempList: List<String>, gender: Gender): List<List<ClothesItem>> {

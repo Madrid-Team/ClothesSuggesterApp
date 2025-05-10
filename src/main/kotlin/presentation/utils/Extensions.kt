@@ -1,6 +1,6 @@
 package presentation.utils
 
-import domain.utils.Gender
+import domain.enums.Gender
 
 val String.Companion.checkCurrentWeather: String
     get() =  "🌤️ Checking current weather..."
