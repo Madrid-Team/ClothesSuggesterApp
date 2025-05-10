@@ -1,10 +1,10 @@
 package data.remote.datasource.location
 
-import data.remote.responsmodels.locationModel.LocationResponseModel
+import data.remote.dtos.locationDto.LocationDto
 
-fun createLocationRemoteModel(ipAddress: String): LocationResponseModel {
+fun createLocationRemoteModel(ipAddress: String): LocationDto {
 
-    return LocationResponseModel(
+    return LocationDto(
         asn = "",
         city = "",
         countryCode = "",

@@ -1,6 +1,6 @@
 package data.repositories.helpers
 
-import data.remote.responsmodels.locationModel.LocationResponseModel
+import data.remote.dtos.locationDto.LocationDto
 
 
 
@@ -30,8 +30,8 @@ fun createLocationResponseModel(
     timezone: String = "Africa/Cairo",
     utcOffset: String = "+0200",
     version: String = "IPv4"
-): LocationResponseModel {
-    return LocationResponseModel(
+): LocationDto {
+    return LocationDto(
         asn = asn,
         city = city,
         continentCode = continentCode,

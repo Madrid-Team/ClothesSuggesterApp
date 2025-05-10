@@ -1,8 +1,8 @@
 package data.remote.datasource.location
 
 import com.google.common.truth.Truth.assertThat
-import data.remote.responsmodels.locationModel.IpAddressResponseModel
-import data.remote.responsmodels.locationModel.LocationResponseModel
+import data.remote.dtos.locationDto.IpAddressDto
+import data.remote.dtos.locationDto.LocationDto
 import data.utils.NetworkException
 import io.ktor.client.*
 import io.ktor.client.engine.mock.*
@@ -53,7 +53,7 @@ class LocationRemoteDataSourceTest {
 
         mockResponseHandler = { request ->
             respond(
-                content = jsonConfig.encodeToString(LocationResponseModel.serializer(), locationResponse),
+                content = jsonConfig.encodeToString(LocationDto.serializer(), locationResponse),
                 status = HttpStatusCode.OK,
                 headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             )
@@ -119,11 +119,11 @@ class LocationRemoteDataSourceTest {
     @Test
     fun `getIpAddress should return IpRemoteModel from server`() = runTest {
         val ipAddressBaseUrl = "https://api.ipify.org?format=json"
-        val ipAddress = IpAddressResponseModel(ipAddress = ipAddressBaseUrl)
+        val ipAddress = IpAddressDto(ipAddress = ipAddressBaseUrl)
 
         mockResponseHandler = { request ->
             respond(
-                content = jsonConfig.encodeToString(IpAddressResponseModel.serializer(), ipAddress),
+                content = jsonConfig.encodeToString(IpAddressDto.serializer(), ipAddress),
                 status = HttpStatusCode.OK,
                 headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             )
