@@ -1,5 +1,5 @@
 package data.repositories.helpers
 
-import data.remote.responsmodels.locationModel.IpAddressResponseModel
+import data.remote.dtos.locationDto.IpAddressDto
 
-fun createIpResponseModel(ipAddress : String) : IpAddressResponseModel = IpAddressResponseModel(ipAddress)
+fun createIpResponseModel(ipAddress : String) : IpAddressDto = IpAddressDto(ipAddress)
