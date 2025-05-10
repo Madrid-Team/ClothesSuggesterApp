@@ -1,38 +1,38 @@
-package data.remote.responsmodels.weatherModel
+package data.remote.dtos.weatherDto
 
-import domain.entities.weatherEntity.CurrentWeather
+import domain.entities.weatherEntity.CurrentUnitsWeather
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CurrentWeatherResponseModel(
+data class CurrentUnitsWeatherDto(
     @SerialName("cloud_cover")
-    val cloudCover: Int,
+    val cloudCover: String,
     @SerialName("interval")
-    val interval: Int,
+    val interval: String,
     @SerialName("is_day")
-    val isDay: Int,
+    val isDay: String,
     @SerialName("precipitation")
-    val precipitation: Double,
+    val precipitation: String,
     @SerialName("rain")
-    val rain: Double,
+    val rain: String,
     @SerialName("relative_humidity_2m")
-    val relativeHumidity: Int,
+    val relativeHumidity: String,
     @SerialName("showers")
-    val showers: Double,
+    val showers: String,
     @SerialName("snowfall")
-    val snowfall: Double,
+    val snowfall: String,
     @SerialName("temperature_2m")
-    val temperature: Double,
+    val temperature: String,
     @SerialName("time")
     val time: String,
     @SerialName("weather_code")
-    val weatherCode: Int,
+    val weatherCode: String,
     @SerialName("wind_speed_10m")
-    val windSpeed: Double
+    val windSpeed: String
 ) {
-    fun toCurrentWeatherModel(): CurrentWeather =
-        CurrentWeather(
+    fun toCurrentUnitsWeather(): CurrentUnitsWeather =
+        CurrentUnitsWeather(
             cloudCover = this.cloudCover,
             interval = this.interval,
             isDay = this.isDay,
