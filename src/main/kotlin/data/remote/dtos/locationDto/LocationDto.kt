@@ -8,55 +8,55 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LocationDto(
     @SerialName("asn")
-    val asn: String,
+    val asn: String?,
     @SerialName("city")
     val city: String,
     @SerialName("continent_code")
-    val continentCode: String,
+    val continentCode: String?,
     @SerialName("country")
     val country: String,
     @SerialName("country_area")
-    val countryArea: Double,
+    val countryArea: Double?,
     @SerialName("country_calling_code")
-    val countryCallingCode: String,
+    val countryCallingCode: String?,
     @SerialName("country_capital")
-    val countryCapital: String,
+    val countryCapital: String?,
     @SerialName("country_code")
-    val countryCode: String,
+    val countryCode: String?,
     @SerialName("country_code_iso3")
-    val countryCodeIso3: String,
+    val countryCodeIso3: String?,
     @SerialName("country_name")
     val countryName: String,
     @SerialName("country_population")
-    val countryPopulation: Int,
+    val countryPopulation: Int?,
     @SerialName("country_tld")
-    val countryTld: String,
+    val countryTld: String?,
     @SerialName("currency")
-    val currency: String,
+    val currency: String?,
     @SerialName("currency_name")
-    val currencyName: String,
+    val currencyName: String?,
     @SerialName("in_eu")
-    val inEu: Boolean,
+    val inEu: Boolean?,
     @SerialName("ip")
     val ip: String,
     @SerialName("languages")
-    val languages: String,
+    val languages: String?,
     @SerialName("latitude")
     val latitude: Double,
     @SerialName("longitude")
     val longitude: Double,
     @SerialName("network")
-    val network: String,
+    val network: String?,
     @SerialName("org")
-    val org: String,
+    val org: String?,
     @SerialName("region_code")
-    val regionCode: String,
+    val regionCode: String?,
     @SerialName("timezone")
-    val timezone: String,
+    val timezone: String?,
     @SerialName("utc_offset")
-    val utcOffset: String,
+    val utcOffset: String?,
     @SerialName("version")
-    val version: String
+    val version: String?
 ) {
     fun toLocation(): Location =
         Location(
