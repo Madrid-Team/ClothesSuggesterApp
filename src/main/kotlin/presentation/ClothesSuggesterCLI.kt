@@ -127,8 +127,7 @@ class ClothesSuggesterCLI(
             "2" -> Gender.FEMALE
             else -> {
                 outputPrinter.printError("⚠️ Invalid gender input.")
-                println("Press Enter when you're done to exit...")
-
+                outputPrinter.printMessage("Press Enter when you're done to exit...")
                 null
             }
         }
@@ -160,7 +159,7 @@ class ClothesSuggesterCLI(
 
             else -> {
                 outputPrinter.printError(String.invalidOption)
-                println("Press Enter when you're done to exit...")
+                outputPrinter.printMessage("Press Enter when you're done to exit...")
                 false
             }
         }

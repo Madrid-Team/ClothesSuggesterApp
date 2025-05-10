@@ -7,6 +7,8 @@ import domain.usecases.clothes.GetOutfitUseCase
 import domain.usecases.clothes.GetWeeklyOutfitUseCase
 import domain.usecases.weather.GetCurrentWeatherUseCase
 import domain.usecases.weather.GetWeeklyWeatherUseCase
+import domain.usecases.weather.createCurrentWeather
+import domain.usecases.weather.createWeatherModel
 import org.junit.jupiter.api.Assertions.*
 import presentation.components.InputReader
 import presentation.components.OutputPrinter
@@ -60,20 +62,12 @@ class ClothesSuggesterCLITest {
     @Test
     fun `should print welcome message when app starts`() {
         every { inputReader.readInput(any()) } returnsMany listOf("1", "1", "0")
-        coEvery { getCurrentWeatherUseCase.getCurrentWeather() } returns CurrentWeather(
-            cloudCover = 0,
-            interval = 1,
-            isDay = 1,
-            precipitation = 0.0,
-            rain = 0.0,
-            relativeHumidity = 50,
-            showers = 0.0,
-            snowfall = 0.0,
-            temperature = 25.0,
+        val weather = createCurrentWeather(
+            temperature = 24.0,
             time = "2025-05-09T14:00",
-            weatherCode = 0,
-            windSpeed = 5.0
         )
+        coEvery { getCurrentWeatherUseCase.getCurrentWeather() } returns weather
+
 
         coEvery { getOutfitUseCase.getDailyOutfit(any(), any()) } returns listOf(
             ClothesItem("T-shirt", 1, "A cool cotton T-shirt")
@@ -89,20 +83,11 @@ class ClothesSuggesterCLITest {
     @Test
     fun `should show today's outfit when user selects option 1`() {
         every { inputReader.readInput(any()) } returnsMany listOf("1", "1", "1")
-        coEvery { getCurrentWeatherUseCase.getCurrentWeather() } returns CurrentWeather(
-            cloudCover = 0,
-            interval = 1,
-            isDay = 1,
-            precipitation = 0.0,
-            rain = 0.0,
-            relativeHumidity = 50,
-            showers = 0.0,
-            snowfall = 0.0,
+        val weather = createCurrentWeather(
             temperature = 24.0,
             time = "2025-05-09T14:00",
-            weatherCode = 0,
-            windSpeed = 5.0
         )
+        coEvery { getCurrentWeatherUseCase.getCurrentWeather() } returns weather
         coEvery { getOutfitUseCase.getDailyOutfit(any(), any()) } returns listOf(
             ClothesItem("T-shirt", 1, "Cool and comfy.")
         )
@@ -142,7 +127,7 @@ class ClothesSuggesterCLITest {
 
     @Test
     fun `should print error message for invalid gender input`() {
-        every { inputReader.readInput(any()) } returnsMany listOf("1", "3") // consent = 1, gender = 3
+        every { inputReader.readInput(any()) } returnsMany listOf("1", "3")
 
         clothesSuggesterCLI.start()
 
@@ -171,30 +156,32 @@ class ClothesSuggesterCLITest {
 
     @Test
     fun `should print error message for invalid menu option`() {
-        every { inputReader.readInput(any()) } returnsMany listOf("1", "1", "5") // consent, gender, invalid option
+        every { inputReader.readInput(any()) } returnsMany listOf("1", "1", "5")
 
         clothesSuggesterCLI.start()
 
         verify { outputPrinter.printError(String.invalidOption) }
+
     }
+    @Test
+    fun `should print error and exit message when user enters invalid consent option`() {
+        every { inputReader.readInput(any()) } returns "invalid"
+
+        clothesSuggesterCLI.start()
+
+        verify { outputPrinter.printError(String.invalidOption) }
+        verify { outputPrinter.printMessage("Press Enter when you're done to exit...") }
+    }
+
 
     @Test
     fun `should print recommendation complete message for today's outfit`() {
         every { inputReader.readInput(any()) } returnsMany listOf("1", "1", "1")
-        coEvery { getCurrentWeatherUseCase.getCurrentWeather() } returns CurrentWeather(
-            cloudCover = 0,
-            interval = 1,
-            isDay = 1,
-            precipitation = 0.0,
-            rain = 0.0,
-            relativeHumidity = 50,
-            showers = 0.0,
-            snowfall = 0.0,
-            temperature = 23.0,
-            time = "2025-05-09T12:00",
-            weatherCode = 1,
-            windSpeed = 5.0
+        val weather = createCurrentWeather(
+            temperature = 24.0,
+            time = "2025-05-09T14:00",
         )
+        coEvery { getCurrentWeatherUseCase.getCurrentWeather() } returns weather
         coEvery { getOutfitUseCase.getDailyOutfit(any(), any()) } returns listOf(
             ClothesItem("Jacket", 1, "Warm and stylish.")
         )
@@ -204,5 +191,34 @@ class ClothesSuggesterCLITest {
 
         verify { outputPrinter.printMessage(String.recommendationComplete) }
     }
+    @Test
+    fun `should print recommendation complete and fireworks after today outfit`() = runTest {
+        every { inputReader.readInput(any()) } returnsMany listOf("1", "1", "1")
+        val weather = createCurrentWeather(
+            temperature = 24.0,
+            time = "2025-05-09T14:00",
+        )
+        coEvery { getCurrentWeatherUseCase.getCurrentWeather() } returns weather
+        coEvery { getOutfitUseCase.getDailyOutfit(any(), any()) } returns listOf(
+            ClothesItem("Sweater", 1, "Warm and cozy.")
+        )
+
+        clothesSuggesterCLI.start()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        verify { outputPrinter.printMessage(String.recommendationComplete) }
+
+        val fireworksLines = listOf(
+            "       🎆        🎇        🎆",
+            "    *     *   *     *   *     *",
+            "  *   💥   * *  💫  * *   🎉  *",
+            "    *     *   *     *   *     *",
+            "       🎆        🎇        🎆",
+        )
+        fireworksLines.forEach {
+            verify { outputPrinter.printMessage(it) }
+        }
+    }
+
 
 }
