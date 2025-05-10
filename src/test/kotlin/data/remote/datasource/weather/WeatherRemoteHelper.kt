@@ -1,9 +1,9 @@
 package data.remote.datasource.weather
 
-import data.remote.responsmodels.weatherModel.*
+import data.remote.dtos.weatherDto.*
 
 fun createWeatherRemoteModel(
-    current: CurrentWeatherResponseModel = CurrentWeatherResponseModel(
+    current: CurrentWeatherDto = CurrentWeatherDto(
         cloudCover = 0,
         interval = 0,
         isDay = 1,
@@ -17,7 +17,7 @@ fun createWeatherRemoteModel(
         weatherCode = 0,
         windSpeed = 0.0
     ),
-    currentUnits: CurrentUnitsWeatherResponseModel = CurrentUnitsWeatherResponseModel(
+    currentUnits: CurrentUnitsWeatherDto = CurrentUnitsWeatherDto(
         cloudCover = "%",
         interval = "min",
         isDay = "boolean",
@@ -31,13 +31,13 @@ fun createWeatherRemoteModel(
         weatherCode = "code",
         windSpeed = "km/h"
     ),
-    daily: DailyWeatherTemperatureResponseModel = DailyWeatherTemperatureResponseModel(
+    daily: DailyWeatherTemperatureDto = DailyWeatherTemperatureDto(
         temperatureMax = listOf(),
         temperatureMin = listOf(),
         time = listOf(),
         weatherCode = listOf()
     ),
-    dailyUnits: DailyUnitsWeatherTemperatureResponseModel = DailyUnitsWeatherTemperatureResponseModel(
+    dailyUnits: DailyUnitsWeatherTemperatureDto = DailyUnitsWeatherTemperatureDto(
         temperatureMax = "°C",
         temperatureMin = "°C",
         time = "ISO8601",
@@ -50,8 +50,8 @@ fun createWeatherRemoteModel(
     timezone: String = "UTC",
     timezoneAbbreviation: String = "UTC",
     utcOffsetSeconds: Int = 0
-): WeatherResponseModel {
-    return WeatherResponseModel(
+): WeatherDto {
+    return WeatherDto(
         current = current,
         currentUnits = currentUnits,
         daily = daily,

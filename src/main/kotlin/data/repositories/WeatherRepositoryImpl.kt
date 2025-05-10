@@ -20,7 +20,7 @@ class WeatherRepositoryImpl(
             val newLatitude = getLocation().latitude
             val newLongitude = getLocation().longitude
             val result = weatherDataSource.getWeather(latitude = newLatitude, longitude = newLongitude)
-            return result.toWeatherModel()
+            return result.toWeather()
         } catch (exception: Exception) {
             throw exception.toWeatherException()
         }
@@ -28,7 +28,7 @@ class WeatherRepositoryImpl(
 
     internal suspend fun getIpAddress(): IpAddress {
         return try {
-            locationRepository.getIpAddress().toIpAddressModel()
+            locationRepository.getIpAddress().toIpAddress()
         }catch (exception: Exception) {
             throw exception.toLocationExceptions()
         }
@@ -37,7 +37,7 @@ class WeatherRepositoryImpl(
     internal suspend fun getLocation(): Location {
         return try {
             val ipAddress = getIpAddress().ipAddress
-            locationRepository.getCurrentLocation(ipAddress).toLocationModel()
+            locationRepository.getCurrentLocation(ipAddress).toLocation()
         }catch (exception: Exception){
             throw exception.toLocationExceptions()
         }

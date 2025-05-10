@@ -1,9 +1,9 @@
 package data.remote.datasource.location
 
-import data.remote.responsmodels.locationModel.IpAddressResponseModel
-import data.remote.responsmodels.locationModel.LocationResponseModel
+import data.remote.dtos.locationDto.IpAddressDto
+import data.remote.dtos.locationDto.LocationDto
 
 interface LocationDataSource {
-    suspend fun getCurrentLocation(ipAddress: String): LocationResponseModel
-    suspend fun getIpAddress(): IpAddressResponseModel
+    suspend fun getCurrentLocation(ipAddress: String): LocationDto
+    suspend fun getIpAddress(): IpAddressDto
 }

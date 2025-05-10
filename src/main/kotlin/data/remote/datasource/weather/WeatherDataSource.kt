@@ -1,8 +1,8 @@
 package data.remote.datasource.weather
 
-import data.remote.responsmodels.weatherModel.WeatherResponseModel
+import data.remote.dtos.weatherDto.WeatherDto
 
 
 interface WeatherDataSource {
-    suspend fun getWeather(latitude: Double, longitude: Double): WeatherResponseModel
+    suspend fun getWeather(latitude: Double, longitude: Double): WeatherDto
 }

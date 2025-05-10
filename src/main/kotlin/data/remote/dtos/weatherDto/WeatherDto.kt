@@ -1,4 +1,4 @@
-package data.remote.responsmodels.weatherModel
+package data.remote.dtos.weatherDto
 
 import domain.entities.weatherEntity.Weather
 import kotlinx.serialization.SerialName
@@ -6,15 +6,15 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class WeatherResponseModel(
+data class WeatherDto(
     @SerialName("current")
-    val current: CurrentWeatherResponseModel,
+    val current: CurrentWeatherDto,
     @SerialName("current_units")
-    val currentUnits: CurrentUnitsWeatherResponseModel,
+    val currentUnits: CurrentUnitsWeatherDto,
     @SerialName("daily")
-    val daily: DailyWeatherTemperatureResponseModel,
+    val daily: DailyWeatherTemperatureDto,
     @SerialName("daily_units")
-    val dailyUnits: DailyUnitsWeatherTemperatureResponseModel,
+    val dailyUnits: DailyUnitsWeatherTemperatureDto,
     @SerialName("elevation")
     val elevation: Double,
     @SerialName("generationtime_ms")
@@ -30,12 +30,12 @@ data class WeatherResponseModel(
     @SerialName("utc_offset_seconds")
     val utcOffsetSeconds: Int
 ){
-    fun toWeatherModel(): Weather =
+    fun toWeather(): Weather =
         Weather(
-            current = this.current.toCurrentWeatherModel(),
-            currentUnits = this.currentUnits.toCurrentUnitsWeatherModel(),
-            daily = this.daily.toDailyWeatherTemperatureModel(),
-            dailyUnits = this.dailyUnits.toDailyUnitsWeatherTemperatureModel(),
+            current = this.current.toCurrentWeather(),
+            currentUnits = this.currentUnits.toCurrentUnitsWeather(),
+            daily = this.daily.toDailyWeatherTemperature(),
+            dailyUnits = this.dailyUnits.toDailyUnitsWeatherTemperature(),
             elevation = this.elevation,
             generationTime = this.generationTime,
             latitude = this.latitude,

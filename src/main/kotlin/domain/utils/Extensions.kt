@@ -17,7 +17,8 @@ fun Double.convertTemperatureToWeatherCode(): String {
         in 0..10 -> "cold.json"
         in 11..20 -> "cool.json"
         in 21..30 -> "warm.json"
-        in 31..50 -> "hot.json"
+        in 31..40 -> "hot.json"
+        in 41..55 -> "very hot.json"
         else -> "unknown.json"
     }
 }

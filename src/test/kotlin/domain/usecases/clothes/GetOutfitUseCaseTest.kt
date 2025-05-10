@@ -3,7 +3,7 @@ package domain.usecases.clothes
 import domain.entities.clothesEntity.ClothesItem
 import domain.entities.clothesEntity.Clothes
 import domain.repositories.ClothesRepository
-import domain.utils.Gender
+import domain.enums.Gender
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope

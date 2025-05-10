@@ -1,6 +1,6 @@
 import data.networking.constructUrl
 import data.remote.datasource.clothes.ClothesRemoteDataSource
-import data.remote.responsmodels.clothesModel.ClothesResponseModel
+import data.remote.dtos.clothesDto.ClothesDto
 import data.utils.NetworkException
 import io.ktor.client.*
 import io.ktor.client.engine.mock.*
@@ -53,7 +53,7 @@ class ClothesRemoteDataSourceTest {
     @Test
     fun `getAllOutfit should return ClothesResponseModel when API call is successful`() = runTest {
         // Given
-        val expectedResponse = ClothesResponseModel(
+        val expectedResponse = ClothesDto(
             femaleClothes = listOf(),
             maleClothes = listOf()
         )
@@ -61,7 +61,7 @@ class ClothesRemoteDataSourceTest {
          mockResponseHandler = { request ->
             if (request.url.toString() == expectedUrl) {
                 respond(
-                    content = jsonConfig.encodeToString(ClothesResponseModel.serializer(), expectedResponse),
+                    content = jsonConfig.encodeToString(ClothesDto.serializer(), expectedResponse),
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                 )

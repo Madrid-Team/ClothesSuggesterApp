@@ -12,7 +12,7 @@ class ClothesRepositoryImpl(
     override suspend fun getAllOutfit(weatherCode: String): Clothes {
         try {
             val result = clothesDataSource.getAllOutfit(weatherCode)
-            return result.toClothesModel()
+            return result.toClothes()
 
         } catch (exception: Exception) {
             throw exception.toClothesExceptions()

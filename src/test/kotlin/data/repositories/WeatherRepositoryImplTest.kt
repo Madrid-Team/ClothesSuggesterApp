@@ -2,7 +2,7 @@ package data.repositories
 
 import data.remote.datasource.location.LocationDataSource
 import data.remote.datasource.weather.WeatherDataSource
-import data.remote.responsmodels.locationModel.IpAddressResponseModel
+import data.remote.dtos.locationDto.IpAddressDto
 import data.repositories.helpers.createIpResponseModel
 import data.repositories.helpers.createLocationResponseModel
 import domain.entities.locationEntity.IpAddress
@@ -123,7 +123,7 @@ class WeatherRepositoryImplTest {
     @Test
     fun `getIpAddress returns correct IpAddressModel when datasource succeeds`() = runTest {
         // Given
-        val fakeResponse = IpAddressResponseModel(ipAddress = "8.8.8.8")
+        val fakeResponse = IpAddressDto(ipAddress = "8.8.8.8")
 
         coEvery { locationDataSource.getIpAddress() } returns fakeResponse
 
