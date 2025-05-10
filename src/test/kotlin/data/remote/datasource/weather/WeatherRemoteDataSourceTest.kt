@@ -1,7 +1,7 @@
 package data.remote.datasource.weather
 
 import com.google.common.truth.Truth.assertThat
-import data.remote.responsmodels.weatherModel.WeatherResponseModel
+import data.remote.dtos.weatherDto.WeatherDto
 import data.utils.NetworkException
 import io.ktor.client.*
 import io.ktor.client.engine.mock.*
@@ -57,7 +57,7 @@ class WeatherRemoteDataSourceTest {
 
         mockResponseHandler = { request ->
             respond(
-                content = jsonConfig.encodeToString(WeatherResponseModel.serializer(), weatherResponse),
+                content = jsonConfig.encodeToString(WeatherDto.serializer(), weatherResponse),
                 status = HttpStatusCode.OK,
                 headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             )

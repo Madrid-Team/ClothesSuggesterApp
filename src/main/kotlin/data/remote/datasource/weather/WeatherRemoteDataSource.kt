@@ -1,7 +1,7 @@
 package data.remote.datasource.weather
 
 import data.networking.safeCall
-import data.remote.responsmodels.weatherModel.WeatherResponseModel
+import data.remote.dtos.weatherDto.WeatherDto
 import data.utils.Constants.WEATHER_BASE_URL
 import data.utils.Constants.WEATHER_CURRENT_PARAMETER
 import data.utils.Constants.WEATHER_DAILY_PARAMETER
@@ -16,8 +16,8 @@ class WeatherRemoteDataSource(
     override suspend fun getWeather(
         latitude: Double,
         longitude: Double
-    ): WeatherResponseModel =
-        safeCall<WeatherResponseModel> {
+    ): WeatherDto =
+        safeCall<WeatherDto> {
             httpClient.get{
                 url(WEATHER_BASE_URL)
                 parameter("latitude", latitude)
