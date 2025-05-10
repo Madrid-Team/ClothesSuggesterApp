@@ -3,6 +3,36 @@ package domain.usecases.weather
 import data.remote.dtos.weatherDto.*
 import domain.entities.weatherEntity.*
 
+
+fun createCurrentWeather(
+    cloudCover:Int = 0,
+    interval:Int = 0,
+    isDay:Int = 1,
+    precipitation:Double = 0.0,
+    rain:Double = 0.0,
+    relativeHumidity:Int = 0,
+    showers:Double = 0.0,
+    snowfall:Double = 0.0,
+    temperature:Double = 0.0,
+    time:String = "",
+    weatherCode:Int = 0,
+    windSpeed:Double = 0.0
+):CurrentWeather{
+    return CurrentWeather(
+        cloudCover = 0,
+        interval = 0,
+        isDay = 1,
+        precipitation = 0.0,
+        rain = 0.0,
+        relativeHumidity = 0,
+        showers = 0.0,
+        snowfall = 0.0,
+        temperature = 0.0,
+        time = "",
+        weatherCode = 0,
+        windSpeed = 0.0
+    )
+}
 fun createWeatherModel(
     current: CurrentWeather = CurrentWeather(
         cloudCover = 0,
