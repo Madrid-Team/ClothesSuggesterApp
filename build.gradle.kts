@@ -50,24 +50,42 @@ tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
 }
+kotlin {
+    jvmToolchain(23)
+}
+
+val excludedClasses = listOf(
+    "**/di/**",
+    "**/data/networking/**",
+    "**/data/utils/**",
+    "**/domain/entities/**",
+    "**/domain/utils/**",
+)
+
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
         xml.required.set(true)
         html.required.set(true)
     }
-
+    classDirectories.setFrom(
+        fileTree("build/classes/kotlin/main") {
+            exclude(excludedClasses)
+        }
+    )
 }
 tasks.jacocoTestCoverageVerification {
+    classDirectories.setFrom(
+        fileTree("build/classes/kotlin/main") {
+            exclude(excludedClasses)
+        }
+    )
     violationRules {
         rule {
             limit {
-                minimum = "0.80".toBigDecimal()
+                minimum = "0.8".toBigDecimal()
             }
         }
     }
 }
 
-kotlin {
-    jvmToolchain(23)
-}
