@@ -42,8 +42,6 @@ dependencies {
     testImplementation("io.ktor:ktor-client-mock:3.1.3")
 
 
-    val logback_version: String by project
-    implementation("ch.qos.logback:logback-classic:${logback_version}")
 }
 
 tasks.test {
