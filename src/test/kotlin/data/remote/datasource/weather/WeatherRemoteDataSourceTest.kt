@@ -20,6 +20,7 @@ class WeatherRemoteDataSourceTest {
     private val jsonConfig = Json {
         ignoreUnknownKeys = true
         isLenient = true
+        ignoreUnknownKeys = true
     }
 
     private val validLatitude = 41.2
