@@ -23,6 +23,7 @@ class ClothesRemoteDataSourceTest {
     private val jsonConfig = Json {
         ignoreUnknownKeys = true
         isLenient = true
+        ignoreUnknownKeys = true
     }
 
     private lateinit var mockEngine: MockEngine

@@ -20,6 +20,7 @@ class LocationRemoteDataSourceTest {
     private val jsonConfig = Json {
         ignoreUnknownKeys = true
         isLenient = true
+        ignoreUnknownKeys = true
     }
 
     private val validIpAddress = "11.11.11.11"
