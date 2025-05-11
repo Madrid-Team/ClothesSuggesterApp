@@ -51,7 +51,7 @@ tasks.test {
     finalizedBy(tasks.jacocoTestReport)
 }
 kotlin {
-    jvmToolchain(23)
+    jvmToolchain(8)
 }
 
 val excludedClasses = listOf(
